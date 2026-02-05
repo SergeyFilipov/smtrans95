@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMTrans95 – Лек транспорт до 3.5 т</title>
+  <meta name="description" content="SMTrans95 ЕООД – лек транспорт до 3.5 т. Приемаме запитвания. Подготовка за стартиране на дейност." />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a33;
+      --text:#eaf0ff;
+      --muted:#b7c3e6;
+      --accent:#2E86DE;
+      --accent2:#00c2a8;
+      --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(46,134,222,.25), transparent 55%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(0,194,168,.18), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 18px;}
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.75);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .logo{
+      display:inline-flex; align-items:baseline;
+      font-size:22px;
+      line-height:1;
+      user-select:none;
+    }
+    .logo .sm{color:var(--text)}
+    .logo .trans{color:var(--accent)}
+    .logo .n95{color:var(--accent2)}
+    .tag{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    nav{
+      display:flex; gap:14px; flex-wrap:wrap;
+      font-weight:700; color:var(--muted);
+    }
+    nav a{
+      padding:8px 10px; border-radius:10px;
+      border:1px solid transparent;
+    }
+    nav a:hover{
+      border-color: var(--line);
+      color: var(--text);
+    }
+    .hero{
+      padding:56px 0 26px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:22px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr}
+    }
+    .h1{
+      font-size:44px;
+      line-height:1.06;
+      margin:0 0 12px;
+      letter-spacing:-.6px;
+    }
+    .lead{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.6;
+      margin:0 0 18px;
+      max-width:60ch;
+    }
+    .cta{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:1px solid var(--line);
+      cursor:pointer;
+      background: rgba(255,255,255,.04);
+    }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(46,134,222,.9), rgba(0,194,168,.75));
+      border-color: transparent;
+      color: #07121f;
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .card{
+      background: rgba(15,26,51,.7);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.03);
+    }
+    .kpi .n{font-size:20px; font-weight:900}
+    .kpi .t{color:var(--muted); font-weight:700; font-size:12px}
+    section{padding:26px 0}
+    .section-title{
+      margin:0 0 12px;
+      font-size:20px;
+      letter-spacing:.1px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 900px){ .grid-3{grid-template-columns:1fr} }
+    .muted{color:var(--muted)}
+    .list{
+      margin:0; padding-left:18px; color:var(--muted);
+      line-height:1.7;
+    }
+    .footer{
+      padding:26px 0 40px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .note{
+      display:inline-block;
+      font-size:12px;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,.25);
+      padding:8px 10px;
+      border-radius:12px;
+      margin-top:10px;
+    }
+    .contact-row{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:10px;
+      font-weight:800;
+    }
+    .pill{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 12px;
+      background: rgba(255,255,255,.03);
+    }
+    .small{font-size:12px}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="#top" aria-label="SMTrans95 начало">
+        <div class="logo" title="SMTrans95">
+          <span class="sm">SM</span><span class="trans">Trans</span><span class="n95">95</span>
+        </div>
+        <span class="tag">Лек транспорт до 3.5 т</span>
+      </a>
+
+      <nav aria-label="Меню">
+        <a href="#about">Кои сме</a>
+        <a href="#services">Услуги</a>
+        <a href="#fleet">Автопарк</a>
+        <a href="#pricing">Цени</a>
+        <a href="#contact">Контакти</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <h1 class="h1">SMTrans95 ЕООД<br/>Лек транспорт и доставки</h1>
+        <p class="lead">
+          В момента сме в подготовка за стартиране на дейността (лицензиране и организация).
+          Приемаме запитвания за <strong>лек транспорт до 3.5 т</strong> и ще се свържем с вас с ориентировъчна оферта.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="#contact">Запитване</a>
+          <a class="btn" href="#services">Какво предлагаме</a>
+        </div>
+
+        <div class="note">* Текстовете са за demo и се коригират, когато дейността стартира.</div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Накратко</div>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="n">до 3.5 т</div>
+            <div class="t">лека категория</div>
+          </div>
+          <div class="kpi">
+            <div class="n">1 бус/камионче</div>
+            <div class="t">стартов автопарк</div>
+          </div>
+          <div class="kpi">
+            <div class="n">България</div>
+            <div class="t">локални курсове</div>
+          </div>
+          <div class="kpi">
+            <div class="n">Запитване</div>
+            <div class="t">цена по параметри</div>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <span class="pill">☎️ +359 88X XXX XXX</span>
+          <span class="pill">✉️ contact@smtrans95.com</span>
+        </div>
+        <div class="small muted" style="margin-top:10px;">
+          (Смени телефона и имейла с реалните, когато решиш.)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap">
+      <h2 class="section-title">Кои сме</h2>
+      <div class="card">
+        <p class="muted" style="margin:0; line-height:1.7;">
+          <strong>SMTrans95 ЕООД</strong> е регистрирана фирма в Търговския регистър.
+          В момента подготвяме старта на транспортната дейност и изграждаме процеси за сигурно и навременно изпълнение.
+          Целта ни е ясна: <strong>коректност, точност и добра комуникация</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <h2 class="section-title">Услуги</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="section-title">Локални доставки</div>
+          <ul class="list">
+            <li>Доставки за фирми и магазини</li>
+            <li>Курсове по заявка</li>
+            <li>Гъвкави часове (по уговорка)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="section-title">Превоз до 3.5 т</div>
+          <ul class="list">
+            <li>Палетни/обемни пратки</li>
+            <li>Товарене/разтоварване (по уговорка)</li>
+            <li>Кратки и средни разстояния</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="section-title">Запитване и оферта</div>
+          <ul class="list">
+            <li>Цена според маршрут и товар</li>
+            <li>Ориентировъчен срок</li>
+            <li>Писмена оферта при нужда</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fleet">
+    <div class="wrap">
+      <h2 class="section-title">Автопарк</h2>
+      <div class="card">
+        <p class="muted" style="margin:0 0 10px; line-height:1.7;">
+          Към момента автопаркът включва <strong>1 превозно средство до 3.5 т</strong>.
+          При стартиране на дейността ще добавим реални снимки и параметри (обем, товароносимост, оборудване).
+        </p>
+        <div class="note">Тук по-късно можем да сложим галерия със снимки.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <h2 class="section-title">Цени</h2>
+      <div class="card">
+        <p class="muted" style="margin:0; line-height:1.7;">
+          В момента работим с ценообразуване <strong>по запитване</strong>.
+          Цената зависи от: разстояние, адреси, вид товар, тегло/обем и срок.
+        </p>
+        <div class="note">Можем да добавим примерни “от–до” цени, когато решите.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2 class="section-title">Контакти</h2>
+      <div class="card">
+        <p class="muted" style="margin:0; line-height:1.7;">
+          За запитване напиши кратко: маршрут (от–до), дата, приблизително тегло/обем и телефон за връзка.
+        </p>
+
+        <div class="contact-row" style="margin-top:14px;">
+          <a class="pill" href="tel:+35988XXXXXXX">☎️ +359 88X XXX XXX</a>
+          <a class="pill" href="mailto:contact@smtrans95.com">✉️ contact@smtrans95.com</a>
+          <span class="pill">📍 Град: (добави)</span>
+        </div>
+
+        <div class="note">За демо: сложи реален телефон и имейл, иначе изглежда “недовършено”.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    © <span id="y"></span> SMTrans95 ЕООД · Demo страница
+  </div>
+</footer>
+
+<script>
+  document.getElementById("y").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

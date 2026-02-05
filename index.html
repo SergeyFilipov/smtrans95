@@ -61,15 +61,31 @@
       display:flex; gap:14px; flex-wrap:wrap;
       font-weight:700; color:var(--muted);
     }
+    
     nav a{
-      padding:8px 10px; border-radius:10px;
-      border:1px solid transparent;
+      background: linear-gradient(90deg, rgba(46,134,222,.95), rgba(0,194,168,.85));
+      color: #07121f;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-weight: 800;
+      border: none;
+      box-shadow: 0 6px 14px rgba(46,134,222,.35);
+      transition: all .2s ease;
     }
+    
+    /* hover ефект */
     nav a:hover{
-      border-color: var(--line);
-      color: var(--text);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(46,134,222,.45);
+      filter: brightness(1.05);
     }
-  
+    
+    /* click */
+    nav a:active{
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(46,134,222,.35);
+    }
+      
     .hero{
       padding:56px 24px 26px;
     }
@@ -131,7 +147,49 @@
       padding: 18px;
       box-shadow: 0 12px 28px rgba(0,0,0,.12);
     }
+
+    /* ===== LIGHT THEME CARDS (global override) ===== */
+
+    .card{
+      background: #ffffff;
+      border: 1px solid rgba(2,6,23,.10);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.10);
+    }
     
+    /* вторичен текст на светло */
+    .muted{
+      color: #475569;
+    }
+    
+    /* KPI кутиите */
+    .kpi{
+      background: #ffffff;
+      border: 1px solid rgba(2,6,23,.10);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.06);
+    }
+    
+    .kpi .t{
+      color: #64748b;
+    }
+    
+    /* pill елементите */
+    .pill{
+      background: #ffffff;
+      border: 1px solid rgba(2,6,23,.10);
+      box-shadow: 0 8px 16px rgba(0,0,0,.05);
+    }
+    
+    /* note кутии */
+    .note{
+      background: #ffffff;
+      border: 1px dashed rgba(2,6,23,.18);
+      color: #64748b;
+    }
+
     .kpis{
       display:grid;
       grid-template-columns: 1fr 1fr;

@@ -269,23 +269,23 @@ footer{
   .topbar{
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
   }
 
   .tabs{
     width: 100%;
     padding: 0 8px;
-    justify-content: flex-start;
+    gap: 6px;                 /* по-малко разстояние между табовете */
   }
 
   .tab{
-    margin: 2px 0;
+    padding: 5px 10px;        /* ↓ от 10x16 → ~1/3 по-малко */
+    border-radius: 12px;      /* малко по-компактно */
+    font-size: 14px;          /* ↓ от default */
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
   }
 
-  .h1{
-    font-size: 30px;
-    line-height: 1.15;
-  }
 }
 
 .modal{

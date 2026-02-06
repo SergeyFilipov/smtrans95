@@ -623,21 +623,25 @@ footer{
 }
 
 .team-links{
+  margin-top:10px;                 /* 10px разстояние от текста */
+  padding-top:12px;
+  border-top:1px solid rgba(2,6,23,.1);
   display:flex;
-  gap:14px;
-  justify-content:center;
-  flex-wrap:wrap;
+  flex-direction:column;
+  gap:10px;                        /* разстояние между линковете */
+  align-items:center;
 }
 
 .team-links a{
-  font-size:14px;
-  font-weight:700;
-  color:var(--blue);
-  text-decoration:none;
+  font-size:16px;                  /* по-големи */
+  font-weight:800;
+  color:#1d4ed8;                   /* по-наситено синьо */
+  text-decoration:underline;       /* подчертани */
+  text-underline-offset:3px;
 }
 
 .team-links a:hover{
-  text-decoration:underline;
+  filter:brightness(0.9);
 }
 
 .team-role{
@@ -646,6 +650,10 @@ footer{
   margin-bottom: 6px;
 }
 
+[data-page="about"]{
+  padding-bottom:15mm;
+}
+  
 </style>
 </head>
 

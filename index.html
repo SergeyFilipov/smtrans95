@@ -606,12 +606,15 @@ footer{
 .team-name{
   font-size:18px;
   font-weight:900;
+  margin-top:8px;        /* изравнява визуално имената */
+  margin-bottom:2px;
 }
 
 .team-summary{
   text-align: justify;
-  font-weight: 500;   /* леко удебелен, без да тежи */
-  line-height: 1.65;
+  font-weight:500;       /* леко удебелен */
+  line-height:1.65;
+  margin-top:6px;
 }
 
 /* 10 мм разстояние между двата профила */
@@ -635,6 +638,12 @@ footer{
 
 .team-links a:hover{
   text-decoration:underline;
+}
+
+.team-role{
+  min-height: 2.8em;   /* място за 2 реда */
+  line-height: 1.4;
+  margin-bottom: 6px;
 }
 
 </style>
@@ -751,8 +760,10 @@ footer{
             комуникация и изпълнение без излишни обещания.
           </div>
       
-          <div class="team-contacts">
-            <a href="mailto:sm.trans95@abv.bg">✉️ sm.trans95@abv.bg</a>
+          <div class="team-links">
+            <a href="mailto:sm.trans95@abv.bg">
+              ✉️ sm.trans95@abv.bg
+            </a>
           </div>
         </div>
       </div>

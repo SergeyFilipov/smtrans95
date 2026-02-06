@@ -249,8 +249,12 @@ main{
 
 .kpis{
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.kpi .n{
+  white-space: nowrap;
 }
 
 .kpi{

@@ -44,9 +44,15 @@ header{
 .topbar{
   display:flex;
   align-items:center;
-  justify-content:space-between;
   gap:14px;
   padding:14px 0;
+}
+
+.nav-group{
+  margin-left:auto;          /* праща групата вдясно */
+  display:flex;
+  align-items:center;
+  gap:12px;                  /* контролира близостта tabs ↔ tools */
 }
 
 /* logo */
@@ -856,6 +862,7 @@ footer{
       <span class="sm">SM</span><span class="trans">Trans</span><span class="n95">95</span>
     </div>
 
+  <div class="nav-group">
     <!-- НАВИГАЦИЯ -->
     <div class="tabs">
       <div class="tab active" data-tab="home">Начало</div>
@@ -864,7 +871,7 @@ footer{
       <div class="tab" data-tab="fleet">Автопарк</div>
       <div class="tab" data-tab="contact">Контакти</div>
     </div>
-
+  
     <!-- ИНСТРУМЕНТИ (Търсене + Език) -->
     <div class="header-tools">
 

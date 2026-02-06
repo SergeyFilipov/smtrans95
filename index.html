@@ -513,8 +513,10 @@ footer{
 
     <form id="inqForm">
       <div class="form-legend"><span class="req">*</span> Задължително</div>
+    
       <div class="form-grid">
     
+        <!-- Клиент -->
         <div class="form-field full">
           <label>Име <span class="req">*</span></label>
           <input
@@ -557,14 +559,16 @@ footer{
             title="Само цифри, може да започва с +. Дължина 8–15 цифри."
           >
         </div>
-
+    
+        <!-- Данни за товара -->
         <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
     
-        <div>
+        <div class="form-field">
+          <label>Тегло (кг) <span class="req">*</span></label>
           <input
             type="number"
             name="weightKg"
-            placeholder="Тегло (кг) *"
+            placeholder="напр. 520"
             required
             min="1"
             max="3500"
@@ -572,33 +576,46 @@ footer{
             inputmode="numeric"
             title="1 до 3500 кг"
           >
-
         </div>
     
-        <div>
-          <input type="text" name="cargoType" placeholder="Вид товар (напр. кашони/мебели/палети) *" required>
+        <div class="form-field">
+          <label>Вид товар <span class="req">*</span></label>
+          <input
+            type="text"
+            name="cargoType"
+            placeholder="напр. кашони / мебели / палети"
+            required
+          >
         </div>
     
-        <div>
-          <input type="text" name="qty" placeholder="Брой (пакети/палети)" >
+        <div class="form-field">
+          <label>Брой (пакети/палети)</label>
+          <input
+            type="text"
+            name="qty"
+            placeholder="напр. 6"
+          >
         </div>
     
-        <div>
+        <div class="form-field">
+          <label>Размери/обем</label>
           <input
             type="text"
             name="dimensions"
-            placeholder="Размери/обем (напр. 120x80x160, ~3 м³, 2 палета)"
+            placeholder="напр. 120x80x160, ~3 м³, 2 палета"
             maxlength="60"
           >
         </div>
     
+        <!-- Маршрут -->
         <div class="full" style="font-weight:900; margin-top:6px;">Маршрут (От → До)</div>
     
-        <div class="full">
-           <input
+        <div class="form-field full">
+          <label>Място на вземане (град + адрес) <span class="req">*</span></label>
+          <input
             type="text"
             name="pickupAddress"
-            placeholder="Място на вземане (град + адрес) *"
+            placeholder="напр. София, ул. ... №3"
             required
             minlength="5"
             maxlength="140"
@@ -607,11 +624,12 @@ footer{
           >
         </div>
     
-        <div class="full">
+        <div class="form-field full">
+          <label>Място на разтоварване (град + адрес) <span class="req">*</span></label>
           <input
             type="text"
             name="dropoffAddress"
-            placeholder="Място на разтоварване (град + адрес) *"
+            placeholder="напр. Пловдив, бул. ... №10"
             required
             minlength="5"
             maxlength="140"
@@ -620,26 +638,44 @@ footer{
           >
         </div>
     
-        <div>
-          <input type="text" name="pickupTime" placeholder="Кога да се вземе (дата/час или 'гъвкаво') *" required>
+        <div class="form-field">
+          <label>Кога да се вземе <span class="req">*</span></label>
+          <input
+            type="text"
+            name="pickupTime"
+            placeholder="напр. 12.03, 10:30 или 'гъвкаво'"
+            required
+          >
         </div>
     
-        <div>
-          <input type="text" name="dropoffTime" placeholder="Кога да се достави (дата/час или 'гъвкаво')">
+        <div class="form-field">
+          <label>Кога да се достави</label>
+          <input
+            type="text"
+            name="dropoffTime"
+            placeholder="напр. 12.03, 14:00 или 'гъвкаво'"
+          >
         </div>
     
-        <div class="full">
-          <textarea name="notes" placeholder="Допълнително: етаж/асансьор, нужда от помощ, достъп, бележки *" required></textarea>
+        <div class="form-field full">
+          <label>Допълнително (етаж/асансьор, нужда от помощ, достъп, бележки) <span class="req">*</span></label>
+          <textarea
+            name="notes"
+            placeholder="напр. 2 етаж без асансьор, нужда от 1 човек помощ, паркиране пред входа..."
+            required
+          ></textarea>
         </div>
-
-        <div class="full">
-          <label style="display:block; font-weight:800; margin:6px 0 6px;">Документи (по желание)</label>
+    
+        <!-- Документи -->
+        <div class="form-field full">
+          <label>Документи (по желание)</label>
           <input type="file" id="docs" name="docs" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
           <div style="font-size:12px; color:var(--muted); margin-top:6px;">
             Файловете не се изпращат автоматично – прикачете ги ръчно в имейла.
           </div>
         </div>
-
+    
+        <!-- Бутони -->
         <div class="form-actions full">
           <button type="button" class="btn-back" onclick="handleCancel()">Назад</button>
           <button type="submit" class="btn-submit">Изпрати</button>

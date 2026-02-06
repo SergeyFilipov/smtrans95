@@ -1575,14 +1575,26 @@ footer{
       // при смяна на таб затвори модала и ресетни success
       resetModalState();
       closeModal();
-
+  
+      // ✅ затвори dropdown-и
+      closeSearch();
+      closeLang();
+  
+      // ✅ изчисти търсенето + махни маркировките
+      if (siteSearch) siteSearch.value = "";
+      clearAllMarks();
+      SEARCH_QUERY = "";
+      SEARCH_RESULTS = [];
+      SEARCH_POS = -1;
+  
       tabs.forEach(t=>t.classList.remove("active"));
       pages.forEach(p=>p.classList.remove("active"));
-
+  
       tab.classList.add("active");
       document.querySelector(`[data-page="${tab.dataset.tab}"]`).classList.add("active");
     });
   });
+
 
   // submit handler (само веднъж!)
   const inqForm = document.getElementById("inqForm");
@@ -1667,6 +1679,13 @@ ${data.notes}
 const searchToggle = document.getElementById("searchToggle");
 const searchDropdown = document.getElementById("searchDropdown");
 const siteSearch = document.getElementById("siteSearch");
+function closeSearch(){
+  searchDropdown.style.display = "none";
+}
+
+function closeLang(){
+  langDropdown.style.display = "none";
+}
   
 // помощна: активира таб
 function activateTab(tabName){
@@ -1853,10 +1872,12 @@ function gotoNextHit(){
 searchToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
 
+  // затвори езиците ако са отворени
+  closeLang();
+
   const isOpen = searchDropdown.style.display === "block";
   searchDropdown.style.display = isOpen ? "none" : "block";
 
-  // фокус само при отваряне
   if (!isOpen) siteSearch.focus();
 });
 
@@ -1899,9 +1920,14 @@ langDropdown.addEventListener("click", (e)=>{
 
 langToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
+
+  // затвори търсачката ако е отворена
+  closeSearch();
+
   langDropdown.style.display =
     langDropdown.style.display === "block" ? "none" : "block";
 });
+
 
 document.querySelectorAll(".lang-option").forEach(option=>{
   option.addEventListener("click", ()=>{

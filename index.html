@@ -467,6 +467,19 @@ footer{
     justify-content: space-between;
     gap: 10px;
   }
+  /* ===== MOBILE FIX: SEARCH dropdown да не бяга извън екрана ===== */
+  .search-box{ width:100%; }
+  
+  .search-dropdown{
+    left:0;                 /* вместо да се лепи вдясно */
+    right:auto;
+    width:min(92vw, 320px); /* да се събира в екрана */
+  }
+  
+  .search-dropdown input{
+    width:100%;             /* да не е 220px на мобилен */
+  }
+
 }
 
 .modal{

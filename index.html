@@ -1681,6 +1681,11 @@ function escapeRegExp(s){
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// ===== GLOBAL SEARCH STATE =====
+let SEARCH_QUERY = "";
+let SEARCH_RESULTS = []; // [{ pageName, marks }]
+let SEARCH_POS = -1;     // глобален индекс в общия списък
+
 // маха всички <mark> от предишно търсене в даден root
 function clearMarks(root){
   if (!root) return;
@@ -1692,19 +1697,22 @@ function clearMarks(root){
   });
 }
 
-// маркира всички срещания в active page
-function highlightMarksInActivePage(q){
-  const activePage = document.querySelector(".tabpage.active");
-  if (!activePage) return [];
+// чисти маркери във всички табове
+function clearAllMarks(){
+  document.querySelectorAll(".tabpage").forEach(p => clearMarks(p));
+}
 
-  // чистим старите маркировки само в активната страница
-  clearMarks(activePage);
+// маркира всички срещания в КОНКРЕТЕН tabpage (работи и да е скрит)
+function highlightMarksInPage(pageEl, q){
+  if (!pageEl) return [];
+
+  clearMarks(pageEl);
 
   const re = new RegExp(escapeRegExp(q), "gi");
   const marks = [];
 
   const walker = document.createTreeWalker(
-    activePage,
+    pageEl,
     NodeFilter.SHOW_TEXT,
     {
       acceptNode(node){
@@ -1755,58 +1763,89 @@ function highlightMarksInActivePage(q){
   return marks;
 }
 
-function focusMarkAt(index){
-  if (!currentMarks.length) return;
+// прави индекс: търси във ВСИЧКИ табове и пази резултатите
+function buildSearchIndex(q){
+  SEARCH_RESULTS = [];
+  SEARCH_POS = -1;
 
-  currentMarks.forEach(m => m.classList.remove("search-hit-active"));
+  const pages = Array.from(document.querySelectorAll(".tabpage"));
 
-  currentIndex = ((index % currentMarks.length) + currentMarks.length) % currentMarks.length;
-
-  const el = currentMarks[currentIndex];
-  el.classList.add("search-hit-active");
-  el.scrollIntoView({ behavior:"smooth", block:"center" });
+  pages.forEach(pageEl => {
+    const marks = highlightMarksInPage(pageEl, q);
+    if (marks.length){
+      SEARCH_RESULTS.push({
+        pageName: pageEl.dataset.page,
+        marks
+      });
+    }
+  });
 }
 
-// главна функция за търсене: намира таб -> отваря -> маркира думата
+// връща общия брой резултати
+function totalHits(){
+  return SEARCH_RESULTS.reduce((sum, r) => sum + r.marks.length, 0);
+}
+
+// от глобална позиция намира кой mark е (в кой таб и кой индекс вътре)
+function resolveGlobalPos(pos){
+  let acc = 0;
+  for (const r of SEARCH_RESULTS){
+    if (pos < acc + r.marks.length){
+      return { pageName: r.pageName, mark: r.marks[pos - acc] };
+    }
+    acc += r.marks.length;
+  }
+  return null;
+}
+
+// фокусира конкретен mark (включва таба)
+function focusMark(pageName, markEl){
+  if (!markEl) return;
+
+  document.querySelectorAll("mark.search-hit-active")
+    .forEach(m => m.classList.remove("search-hit-active"));
+
+  if (pageName) activateTab(pageName);
+
+  setTimeout(() => {
+    markEl.classList.add("search-hit-active");
+    markEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 30);
+}
+
+// ПЪРВО търсене / при смяна на текста
 function runSiteSearch(raw){
   const q = (raw || "").trim();
-  if (q.length < 2) return;
-
-  const allPages = Array.from(document.querySelectorAll(".tabpage"));
-  const foundPage = allPages.find(p =>
-    (p.textContent || "").toLowerCase().includes(q.toLowerCase())
-  );
-
-  if (!foundPage){
-    clearMarks(document.querySelector(".tabpage.active"));
-    currentMarks = [];
-    currentIndex = -1;
+  if (q.length < 2){
+    clearAllMarks();
+    SEARCH_QUERY = "";
+    SEARCH_RESULTS = [];
+    SEARCH_POS = -1;
     return;
   }
 
-  const tabName = foundPage.dataset.page;
-  if (tabName) activateTab(tabName);
+  if (q.toLowerCase() !== (SEARCH_QUERY || "").toLowerCase()){
+    clearAllMarks();
+    SEARCH_QUERY = q;
+    buildSearchIndex(q);
 
-  setTimeout(() => {
-    currentMarks = highlightMarksInActivePage(q);
+    if (totalHits() === 0) return;
 
-    // ако е нова дума -> старт от 1вото
-    if (q.toLowerCase() !== lastQuery.toLowerCase()){
-      lastQuery = q;
-      currentIndex = 0;
-      focusMarkAt(currentIndex);
-      return;
-    }
-
-    // същата дума -> пазим текущото (ако може)
-    if (currentMarks.length){
-      if (currentIndex < 0) currentIndex = 0;
-      focusMarkAt(currentIndex);
-    } else {
-      currentIndex = -1;
-    }
-  }, 30);
+    SEARCH_POS = 0;
+    const hit = resolveGlobalPos(SEARCH_POS);
+    if (hit) focusMark(hit.pageName, hit.mark);
+  }
 }
+
+// СЛЕДВАЩ резултат (Enter)
+function gotoNextHit(){
+  if (!SEARCH_QUERY || totalHits() === 0) return;
+
+  SEARCH_POS = (SEARCH_POS + 1) % totalHits();
+  const hit = resolveGlobalPos(SEARCH_POS);
+  if (hit) focusMark(hit.pageName, hit.mark);
+}
+
   
 searchToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
@@ -1820,20 +1859,19 @@ searchToggle.addEventListener("click", (e)=>{
 
 // ENTER -> търси + отваря таба
 siteSearch.addEventListener("keydown", (e)=>{
-  if (e.key === "Enter"){
+  if(e.key === "Enter"){
     e.preventDefault();
 
-    const q = (siteSearch.value || "").trim();
+    const q = siteSearch.value.trim();
     if (q.length < 2) return;
 
-    // ако е същата заявка и има резултати -> следващия
-    if (q.toLowerCase() === lastQuery.toLowerCase() && currentMarks.length){
-      focusMarkAt(currentIndex + 1);
-      return;
+    // нова дума -> индексира всички табове
+    if (q.toLowerCase() !== (SEARCH_QUERY || "").toLowerCase()){
+      runSiteSearch(q);
+    } else {
+      // същата дума -> следващ резултат (цикъл)
+      gotoNextHit();
     }
-
-    // иначе -> ново търсене
-    runSiteSearch(q);
   }
 });
 

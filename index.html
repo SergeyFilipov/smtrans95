@@ -233,10 +233,15 @@ main{
 }
 
 .kpi{
-  padding: 14px;
+  padding: 18px;
   border-radius: 14px;
   border: 1px solid var(--line);
   background: #fff;
+  text-align: center;        /* ⬅️ хоризонтално */
+  display: flex;             /* ⬇️ вертикално */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .kpi .n{
@@ -459,7 +464,7 @@ footer{
     </div>
 
     <div class="card">
-      <<div class="section-title">Как работим</div>
+      <div class="section-title" style="text-align:center;">Как работим</div>
       
       <div class="kpis">
         <div class="kpi">

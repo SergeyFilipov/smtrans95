@@ -263,14 +263,30 @@ footer{
 @media (max-width: 768px){
 
   header{
-    padding-bottom: 8px;
+    padding-bottom: 10px;
   }
 
   .topbar{
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: stretch;      /* табовете използват цялата ширина */
+    gap: 12px;
   }
+
+  .tabs{
+    width: 100%;
+    padding: 0 8px;            /* ВЪЗДУХ отляво и отдясно */
+    justify-content: flex-start;
+  }
+
+  .tab{
+    margin: 2px 0;             /* да не лепи първия таб */
+  }
+
+  .h1{
+    font-size: 30px;
+    line-height: 1.15;
+  }
+}
 
   .h1{
     font-size: 30px;

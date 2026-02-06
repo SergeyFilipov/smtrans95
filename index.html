@@ -99,14 +99,15 @@ main{
 /* ================= HERO ================= */
 .hero-banner{
   width:100%;
-  padding: 12px 0;      /* ~1 см „рязане“ визуално, без реално рязане */
-  background:#000;      /* ако искаш черен фон отстрани */
+  background:#000;     /* по желание */
+  padding:0;
+  overflow:visible;    /* важно */
+  height:auto;         /* важно */
 }
 
 .hero-banner img{
   width:100%;
-  max-width:1100px;     /* същото като .wrap */
-  height:auto;          /* НИКОГА не реже */
+  height:auto;         /* важно */
   display:block;
   margin:0 auto;
 }

@@ -454,6 +454,23 @@ function openModal(){
 function closeModal(){
   document.getElementById("contactModal").style.display="none";
 }
+
+document.getElementById("inqForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = this.querySelector('[name="name"]').value.trim();
+  const email = this.querySelector('[name="email"]').value.trim();
+  const phone = this.querySelector('[name="phone"]').value.trim();
+  const message = this.querySelector('[name="message"]').value.trim();
+
+  const subject = encodeURIComponent("Запитване от сайта SMTrans95");
+  const body = encodeURIComponent(
+    `Име: ${name}\nEmail: ${email}\nТелефон: ${phone}\n\nСъобщение:\n${message}`
+  );
+
+  window.location.href = `mailto:s_filipov@yahoo.com?subject=${subject}&body=${body}`;
+});
+
 </script>
 
   <!-- CONTACT MODAL -->
@@ -461,7 +478,7 @@ function closeModal(){
   <div class="modal-box">
     <h2>Попълнете контакт формата</h2>
 
-    <form action="send.php" method="POST">
+    <form id="inqForm">
       <input type="text" name="name" placeholder="Име *" required>
       <input type="email" name="email" placeholder="e-Поща *" required>
       <input type="tel" name="phone" placeholder="Тел. номер *" required>

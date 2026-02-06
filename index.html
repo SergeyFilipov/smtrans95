@@ -563,6 +563,51 @@ footer{
 .tabpage[data-page="contact"]{
   margin-bottom: 15mm;
 }
+
+/* ===== TEAM SECTION ===== */
+
+.team-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:22px;
+  margin-top:18px;
+}
+
+@media (max-width: 768px){
+  .team-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.team-member{
+  text-align:center;
+}
+
+.team-member img{
+  width:100%;
+  max-width:280px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius:18px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+  margin-bottom:12px;
+}
+
+.team-text{
+  line-height:1.4;
+}
+
+.team-role{
+  font-size:14px;
+  color: var(--muted);
+  margin-bottom:4px;
+}
+
+.team-name{
+  font-size:18px;
+  font-weight:900;
+}
+
 </style>
 </head>
 
@@ -655,7 +700,31 @@ footer{
 <section class="tabpage" data-page="about">
   <div class="card">
     <h2 class="section-title">Кои сме</h2>
-    <p>SMTrans95 ЕООД е регистрирана фирма за лек транспорт до 3.5 т.</p>
+
+    <div class="team-grid">
+
+      <!-- УПРАВИТЕЛ -->
+      <div class="team-member">
+        <img src="1.jpg" alt="Младен Филипов – управител">
+        <div class="team-text">
+          <div class="team-role">Управител</div>
+          <div class="team-name">Младен Филипов</div>
+        </div>
+      </div>
+
+      <!-- РЪКОВОДИТЕЛ ТРАНСПОРТНА ДЕЙНОСТ -->
+      <div class="team-member">
+        <img src="2.jpg" alt="инж. Сергей Филипов – ръководител транспортна дейност">
+        <div class="team-text">
+          <div class="team-name">инж. Сергей Филипов</div>
+          <div class="team-role">
+            Ръководител транспортна дейност<br>
+            за международен превоз на товари
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 

@@ -432,34 +432,40 @@ footer{
     gap: 10px;
   }
 
-  /* FIX: подреждане на групата */
   .nav-group{
     margin-left: 0;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
+    gap: 10px;
   }
 
-  /* tabs */
+  /* ===== TAB GRID FIX (3 + 2) ===== */
   .tabs{
     width: 100%;
     padding: 0 8px;
-    gap: 6px;
-    justify-content: flex-start;
-  }
-
-  /* бутони търсене + език */
-  .header-tools{
-    width: 100%;
-    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .tab{
-    padding: 5px 10px;
+    flex: 1 1 calc(33.333% - 8px); /* 3 колони */
+    text-align: center;
+    padding: 8px 10px;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 800;
     box-shadow: 0 4px 10px rgba(0,0,0,.15);
+    min-width: 0;
+  }
+
+  /* инструменти на отделен ред */
+  .header-tools{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
   }
 }
 
@@ -1661,9 +1667,6 @@ ${data.notes}
 const searchToggle = document.getElementById("searchToggle");
 const searchDropdown = document.getElementById("searchDropdown");
 const siteSearch = document.getElementById("siteSearch");
-let currentMarks = [];
-let currentIndex = -1;
-let lastQuery = "";
   
 // помощна: активира таб
 function activateTab(tabName){

@@ -8,8 +8,7 @@
 
 <style>
 :root{
-  --bg:#f2f4f8;
-  --card:#ffffff;
+  --bg:#f2f4f8;   /* мръсно бяло – ЕДИНСТВЕН фон */
   --text:#0b1220;
   --muted:#475569;
   --blue:#2E86DE;
@@ -97,11 +96,10 @@ main{
 }
 
 /* ================= HERO ================= */
-/* ================= HERO ================= */
 .hero-banner{
   width:100%;
   padding: 12px 0;      /* ~1 см „рязане“ визуално, без реално рязане */
-  background:#fff;      /* ако искаш черен фон отстрани */
+  background: var(--bg);      
 }
 
 .hero-banner img{
@@ -162,6 +160,7 @@ main{
   gap: 14px;
   margin-top: 18px;
   flex-wrap: wrap;
+  justify-content: flex-start; /* ← ТУК */
 }
 
 /* базов бутон */
@@ -293,6 +292,14 @@ footer{
   header{
     padding-bottom: 10px;
   }
+
+  .h1{
+    font-size: 30px;      /* по-малък шрифт за мобилен */
+    line-height: 1.15;
+    white-space: nowrap; /* да не се чупи на 2 реда */
+  }
+
+}
 
   .topbar{
     flex-direction: column;
@@ -487,7 +494,6 @@ footer{
 
       <div class="cta">
         <button type="button" class="cta-hot" onclick="openModal()">Запитване</button>
-        <div class="btn">Какво предлагаме</div>
       </div>
     </div>
 

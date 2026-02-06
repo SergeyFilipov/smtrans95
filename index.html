@@ -704,9 +704,14 @@ footer{
           <span class="ci-ico">📍</span>
           <div>
             <div class="ci-label">Адрес</div>
-            <!-- тук после ще сложим точния адрес от регистъра -->
-            <a class="ci-value" href="#" target="_blank" rel="noopener">
-              София, (въведи адреса)
+            <a
+              class="ci-value"
+              href="https://www.google.com/maps/search/?api=1&query=гр.+София+1345,+ж.к.+Захарна+фабрика,+бл.+40"
+              target="_blank"
+              rel="noopener"
+            >
+              гр. София 1345, р-н Илинден<br>
+              ж.к. „Захарна фабрика“, бл. 40
             </a>
           </div>
         </div>
@@ -724,9 +729,24 @@ footer{
 
       <div class="firm-box">
         <div class="firm-title">Фирмени данни</div>
-        <div class="firm-row"><span>Фирма:</span><strong>СМ.Транс95 ЕООД</strong></div>
-        <div class="firm-row"><span>ЕИК:</span><strong>(въведи ЕИК)</strong></div>
-        <div class="firm-row"><span>Адрес:</span><strong>(въведи адреса)</strong></div>
+
+        <div class="firm-row">
+          <span>Фирма:</span>
+          <strong>СМ.Транс95 ЕООД</strong>
+        </div>
+
+        <div class="firm-row">
+          <span>ЕИК:</span>
+          <strong>208680881</strong>
+        </div>
+
+        <div class="firm-row">
+          <span>Адрес:</span>
+          <strong>
+            гр. София 1345, р-н Илинден,<br>
+            ж.к. „Захарна фабрика“, бл. 40
+          </strong>
+        </div>
       </div>
     </div>
 
@@ -735,9 +755,8 @@ footer{
       <h2 class="section-title">Къде се намираме</h2>
 
       <div class="map-box">
-        <!-- Тук ще сложим iframe от Google Maps -->
         <iframe
-          src="https://www.google.com/maps?q=Sofia&output=embed"
+          src="https://www.google.com/maps?q=гр.+София+1345,+ж.к.+Захарна+фабрика,+бл.+40&output=embed"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           allowfullscreen
@@ -745,7 +764,12 @@ footer{
       </div>
 
       <div class="map-actions">
-        <a class="map-link" href="https://www.google.com/maps?q=Sofia" target="_blank" rel="noopener">
+        <a
+          class="map-link"
+          href="https://www.google.com/maps/search/?api=1&query=гр.+София+1345,+ж.к.+Захарна+фабрика,+бл.+40"
+          target="_blank"
+          rel="noopener"
+        >
           Отвори в Google Maps
         </a>
       </div>

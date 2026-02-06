@@ -153,13 +153,8 @@ main{
   color: var(--text);
 }
 
-.hero-logo .trans{
-  color: var(--accent);
-}
-
-.hero-logo .n95{
-  color: var(--accent2);
-}
+.hero-logo .trans{ color: var(--blue); }
+.hero-logo .n95{ color: var(--green); }
 
 .lead{
   max-width: 60ch;
@@ -483,22 +478,89 @@ function closeModal(){
   document.getElementById("contactModal").style.display="none";
 }
 
+<script>
+document.getElementById("y").textContent=new Date().getFullYear();
+
+const tabs=document.querySelectorAll(".tab");
+const pages=document.querySelectorAll(".tabpage");
+
+tabs.forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    // ако модалът е отворен/в success – затвори и ресетни при смяна на таб
+    resetModalState();
+    closeModal();
+
+    tabs.forEach(t=>t.classList.remove("active"));
+    pages.forEach(p=>p.classList.remove("active"));
+
+    tab.classList.add("active");
+    document.querySelector(`[data-page="${tab.dataset.tab}"]`).classList.add("active");
+  });
+});
+
+function openModal(){
+  document.getElementById("contactModal").style.display="flex";
+}
+
+function closeModal(){
+  document.getElementById("contactModal").style.display="none";
+}
+
+function resetModalState(){
+  const form = document.getElementById("inqForm");
+  const success = document.getElementById("successBox");
+  if (!form || !success) return;
+
+  // върни формата
+  form.querySelectorAll("input, textarea, button").forEach(el=>{
+    el.disabled = false;
+    if (el.tagName !== "BUTTON") el.style.display = "";
+  });
+
+  // покажи всички полета (ако сме ги крили)
+  form.querySelectorAll(".form-grid").forEach(g=>g.style.display="grid");
+  success.style.display="none";
+}
+
 document.getElementById("inqForm").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const name = this.querySelector('[name="name"]').value.trim();
-  const email = this.querySelector('[name="email"]').value.trim();
-  const phone = this.querySelector('[name="phone"]').value.trim();
-  const message = this.querySelector('[name="message"]').value.trim();
+  const data = Object.fromEntries(new FormData(this).entries());
 
-  const subject = encodeURIComponent("Запитване от сайта SMTrans95");
+  const subject = encodeURIComponent("Запитване за транспорт – SMTrans95");
   const body = encodeURIComponent(
-    `Име: ${name}\nEmail: ${email}\nТелефон: ${phone}\n\nСъобщение:\n${message}`
+`ДАННИ ЗА КЛИЕНТА
+Име: ${data.name}
+Email: ${data.email}
+Телефон: ${data.phone}
+
+ДАННИ ЗА ТОВАРА
+Вид товар: ${data.cargoType}
+Тегло (кг): ${data.weightKg}
+Брой (пакети/палети): ${data.qty || "-"}
+Размери/обем: ${data.dimensions || "-"}
+
+МАРШРУТ
+Вземане (адрес): ${data.pickupAddress}
+Кога да се вземе: ${data.pickupTime}
+Разтоварване (адрес): ${data.dropoffAddress}
+Кога да се достави: ${data.dropoffTime || "-"}
+
+ДОПЪЛНИТЕЛНО
+${data.notes}
+`
   );
 
+  // показваме success в модала и оставяме да стои
+  const successBox = document.getElementById("successBox");
+  const grid = this.querySelector(".form-grid");
+
+  if (grid) grid.style.display = "none";
+  successBox.style.display = "block";
+
+  // отваряме имейла (demo вариант без хостинг)
   window.location.href = `mailto:s_filipov@yahoo.com?subject=${subject}&body=${body}`;
 });
-
 </script>
 
   <!-- CONTACT MODAL -->
@@ -507,13 +569,72 @@ document.getElementById("inqForm").addEventListener("submit", function(e){
     <h2>Попълнете контакт формата</h2>
 
     <form id="inqForm">
-      <input type="text" name="name" placeholder="Име *" required>
-      <input type="email" name="email" placeholder="e-Поща *" required>
-      <input type="tel" name="phone" placeholder="Тел. номер *" required>
-
-      <textarea name="message" placeholder="Съобщение *" required></textarea>
-
-      <button type="submit">Изпрати</button>
+      <div class="form-grid">
+    
+        <div class="full">
+          <input type="text" name="name" placeholder="Име *" required>
+        </div>
+    
+        <div>
+          <input type="email" name="email" placeholder="e-Поща *" required>
+        </div>
+    
+        <div>
+          <input type="tel" name="phone" placeholder="Тел. номер *" required>
+        </div>
+    
+        <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
+    
+        <div>
+          <input type="number" name="weightKg" placeholder="Тегло (кг) *" min="0" required>
+        </div>
+    
+        <div>
+          <input type="text" name="cargoType" placeholder="Вид товар (напр. кашони/мебели/палети) *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="qty" placeholder="Брой (пакети/палети)" >
+        </div>
+    
+        <div>
+          <input type="text" name="dimensions" placeholder="Размери/обем (пример: 120x80x160 см или ~3 м³)">
+        </div>
+    
+        <div class="full" style="font-weight:900; margin-top:6px;">Маршрут (От → До)</div>
+    
+        <div class="full">
+          <input type="text" name="pickupAddress" placeholder="Място на вземане (град + адрес) *" required>
+        </div>
+    
+        <div class="full">
+          <input type="text" name="dropoffAddress" placeholder="Място на разтоварване (град + адрес) *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="pickupTime" placeholder="Кога да се вземе (дата/час или 'гъвкаво') *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="dropoffTime" placeholder="Кога да се достави (дата/час или 'гъвкаво')">
+        </div>
+    
+        <div class="full">
+          <textarea name="notes" placeholder="Допълнително: етаж/асансьор, нужда от помощ, достъп, бележки *" required></textarea>
+        </div>
+    
+        <div class="full">
+          <button type="submit">Изпрати</button>
+        </div>
+    
+      </div>
+    
+      <div class="success-box" id="successBox">
+        ✅ Запитването е подготвено за изпращане и е успешно обработено. Ще се свържем с вас!
+        <div style="font-weight:600; opacity:.9; margin-top:6px;">
+          Може да затворите прозореца или да смените таб.
+        </div>
+      </div>
     </form>
 
     <span class="close" onclick="closeModal()">✕</span>

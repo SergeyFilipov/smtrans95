@@ -1646,7 +1646,10 @@ ${data.notes}
 const searchToggle = document.getElementById("searchToggle");
 const searchDropdown = document.getElementById("searchDropdown");
 const siteSearch = document.getElementById("siteSearch");
-
+let currentMarks = [];
+let currentIndex = -1;
+let lastQuery = "";
+  
 // помощна: активира таб
 function activateTab(tabName){
   tabs.forEach(t=>t.classList.remove("active"));
@@ -1737,13 +1740,16 @@ function highlightMarksInActivePage(q){
   return marks;
 }
 
-// фокусира първия резултат
-function focusFirstMark(marks){
-  if (!marks || !marks.length) return;
+function focusMarkAt(index){
+  if (!currentMarks.length) return;
 
-  marks.forEach(m => m.classList.remove("search-hit-active"));
-  marks[0].classList.add("search-hit-active");
-  marks[0].scrollIntoView({ behavior:"smooth", block:"center" });
+  currentMarks.forEach(m => m.classList.remove("search-hit-active"));
+
+  currentIndex = ((index % currentMarks.length) + currentMarks.length) % currentMarks.length;
+
+  const el = currentMarks[currentIndex];
+  el.classList.add("search-hit-active");
+  el.scrollIntoView({ behavior:"smooth", block:"center" });
 }
 
 // главна функция за търсене: намира таб -> отваря -> маркира думата
@@ -1751,26 +1757,39 @@ function runSiteSearch(raw){
   const q = (raw || "").trim();
   if (q.length < 2) return;
 
-  // 1) намираме първата секция (tabpage), която съдържа текста
   const allPages = Array.from(document.querySelectorAll(".tabpage"));
   const foundPage = allPages.find(p =>
     (p.textContent || "").toLowerCase().includes(q.toLowerCase())
   );
 
-  // ако няма резултат: чистим маркери в активната страница и край
   if (!foundPage){
     clearMarks(document.querySelector(".tabpage.active"));
+    currentMarks = [];
+    currentIndex = -1;
     return;
   }
 
-  // 2) отваряме таба
   const tabName = foundPage.dataset.page;
   if (tabName) activateTab(tabName);
 
-  // 3) след като се покаже – маркираме
   setTimeout(() => {
-    const marks = highlightMarksInActivePage(q);
-    focusFirstMark(marks);
+    currentMarks = highlightMarksInActivePage(q);
+
+    // ако е нова дума -> старт от 1вото
+    if (q.toLowerCase() !== lastQuery.toLowerCase()){
+      lastQuery = q;
+      currentIndex = 0;
+      focusMarkAt(currentIndex);
+      return;
+    }
+
+    // същата дума -> пазим текущото (ако може)
+    if (currentMarks.length){
+      if (currentIndex < 0) currentIndex = 0;
+      focusMarkAt(currentIndex);
+    } else {
+      currentIndex = -1;
+    }
   }, 30);
 }
   
@@ -1786,9 +1805,20 @@ searchToggle.addEventListener("click", (e)=>{
 
 // ENTER -> търси + отваря таба
 siteSearch.addEventListener("keydown", (e)=>{
-  if(e.key === "Enter"){
+  if (e.key === "Enter"){
     e.preventDefault();
-    runSiteSearch(siteSearch.value);
+
+    const q = (siteSearch.value || "").trim();
+    if (q.length < 2) return;
+
+    // ако е същата заявка и има резултати -> следващия
+    if (q.toLowerCase() === lastQuery.toLowerCase() && currentMarks.length){
+      focusMarkAt(currentIndex + 1);
+      return;
+    }
+
+    // иначе -> ново търсене
+    runSiteSearch(q);
   }
 });
 

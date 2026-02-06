@@ -827,6 +827,22 @@ footer{
   background:#f1f5f9;
 }
 
+.lang-option .flag{ display:inline-block; width:1.4em; }
+.lang-option .code{ font-weight:900; margin-right:6px; }
+
+/* ===== SEARCH HIGHLIGHT ===== */
+.search-hit{
+  background: #fff59d;   /* жълто отбелязване */
+  padding:0 2px;
+  border-radius:4px;
+}
+
+.search-hit-active{
+  background: #ffd54f;   /* по-наситено за активния резултат */
+  outline:2px solid rgba(46,134,222,.6);
+  border-radius:4px;
+}
+
 </style>
 </head>
 
@@ -874,15 +890,15 @@ footer{
 
         <div class="lang-dropdown" id="langDropdown">
           <div class="lang-option" data-flag="🇧🇬" data-code="BG">
-            🇧🇬 Български
+            <span class="flag">🇧🇬</span><span class="code">BG</span> Български
           </div>
-
+        
           <div class="lang-option" data-flag="🇬🇧" data-code="EN">
-            🇬🇧 English
+            <span class="flag">🇬🇧</span><span class="code">EN</span> English
           </div>
-
+        
           <div class="lang-option" data-flag="🇹🇷" data-code="TR">
-            🇹🇷 Türkçe
+            <span class="flag">🇹🇷</span><span class="code">TR</span> Türkçe
           </div>
         </div>
       </div>
@@ -1615,32 +1631,129 @@ ${data.notes}
     });
   });
 
-/* ===== SEARCH ===== */
+/* ===== SEARCH (working highlight + Enter) ===== */
 
 const searchToggle = document.getElementById("searchToggle");
 const searchDropdown = document.getElementById("searchDropdown");
 const siteSearch = document.getElementById("siteSearch");
 
+let searchMarks = [];
+let activeIndex = 0;
+
+function clearSearchMarks(){
+  searchMarks.forEach(m => {
+    const parent = m.parentNode;
+    if (!parent) return;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+  searchMarks = [];
+  activeIndex = 0;
+}
+
+function highlightSearch(query){
+  clearSearchMarks();
+  if (!query || query.trim().length < 2) return;
+
+  const q = query.trim();
+  const root = document.querySelector("main") || document.body;
+
+  // не търсим вътре в script/style
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node){
+      if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      const p = node.parentElement;
+      if (!p) return NodeFilter.FILTER_REJECT;
+      const tag = p.tagName?.toLowerCase();
+      if (tag === "script" || tag === "style") return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(node => {
+    const text = node.nodeValue;
+    if (!re.test(text)) return;
+
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    let m;
+
+    while ((m = re.exec(text)) !== null){
+      const before = text.slice(last, m.index);
+      if (before) frag.appendChild(document.createTextNode(before));
+
+      const mark = document.createElement("mark");
+      mark.className = "search-hit";
+      mark.textContent = m[0];
+      frag.appendChild(mark);
+      searchMarks.push(mark);
+
+      last = m.index + m[0].length;
+    }
+
+    const after = text.slice(last);
+    if (after) frag.appendChild(document.createTextNode(after));
+
+    node.parentNode.replaceChild(frag, node);
+  });
+
+  if (searchMarks.length){
+    activeIndex = 0;
+    focusSearchMark(activeIndex);
+  }
+}
+
+function focusSearchMark(i){
+  searchMarks.forEach(m => m.classList.remove("search-hit-active"));
+  const el = searchMarks[i];
+  if (!el) return;
+
+  el.classList.add("search-hit-active");
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 searchToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
-  searchDropdown.style.display =
-    searchDropdown.style.display === "block" ? "none" : "block";
-  siteSearch.focus();
+  const isOpen = searchDropdown.style.display === "block";
+  searchDropdown.style.display = isOpen ? "none" : "block";
+  if (!isOpen) siteSearch.focus();
 });
 
-// търсене в страницата
-siteSearch.addEventListener("input", ()=>{
-  const text = siteSearch.value.toLowerCase();
-  if(text.length < 2) return;
+// да не се затваря като кликнеш в полето
+siteSearch.addEventListener("click", (e)=> e.stopPropagation());
 
-  const content = document.body.innerText.toLowerCase();
-  const index = content.indexOf(text);
+siteSearch.addEventListener("keydown", (e)=>{
+  if (e.key !== "Enter") return;
+  e.preventDefault();
 
-  if(index !== -1){
-    window.find(text);
+  const q = siteSearch.value.trim();
+  if (!q) return;
+
+  // ако още няма резултати или query се е сменило – хайлайт
+  if (!searchMarks.length){
+    highlightSearch(q);
+    return;
   }
+
+  // Enter = next резултат
+  activeIndex = (activeIndex + 1) % searchMarks.length;
+  focusSearchMark(activeIndex);
 });
 
+// ако пишеш нов текст – правим ново търсене (лек debounce)
+let searchDebounce = null;
+siteSearch.addEventListener("input", ()=>{
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    highlightSearch(siteSearch.value);
+  }, 200);
+});
 
 /* ===== LANGUAGE ===== */
 
@@ -1648,6 +1761,10 @@ const langToggle = document.getElementById("langToggle");
 const langDropdown = document.getElementById("langDropdown");
 const langFlag = document.getElementById("langFlag");
 const langCode = document.getElementById("langCode");
+
+langDropdown.addEventListener("click", (e)=>{
+  e.stopPropagation();
+});
 
 langToggle.addEventListener("click", (e)=>{
   e.stopPropagation();

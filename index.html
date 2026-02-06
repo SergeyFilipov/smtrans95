@@ -99,16 +99,23 @@ main{
 /* ================= HERO ================= */
 .hero-banner{
   width:100%;
-  height:420px;          /* ← тук режем ~1/3 */
+  height:520px;          /* desktop – балансирана височина */
   overflow:hidden;
 }
 
 .hero-banner img{
   width:100%;
   height:100%;
-  object-fit:cover;      /* запълва, без да се разтяга */
-  object-position:center; /* централно рязане */
+  object-fit:cover;      
+  object-position:center;
   display:block;
+}
+
+/* mobile – оставяме както е */
+@media (max-width: 768px){
+  .hero-banner{
+    height:360px;
+  }
 }
 
 .hero-grid{

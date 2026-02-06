@@ -923,21 +923,30 @@ footer{
       </p>
 
       <div class="fleet-gallery">
-        <!-- Основна снимка -->
-        <img class="fleet-main" src="bus-1.jpg" alt="SMTrans95 – бус">
-
-        <!-- Мини снимки (по желание) -->
-        <div class="fleet-thumbs">
-          <img src="bus-1.jpg" alt="SMTrans95 – бус снимка 1">
-          <img src="bus-2.jpg" alt="SMTrans95 – бус снимка 2">
-          <img src="bus-3.jpg" alt="SMTrans95 – бус снимка 3">
-        </div>
-
-        <div class="fleet-note">
-          Снимките са реални от автопарка на фирмата.
-        </div>
+      <!-- Основна снимка -->
+      <img
+        class="fleet-main"
+        id="fleetMain"
+        src="bus-1.jpg"
+        alt="SMTrans95 – брандиран лекотоварен бус"
+      >
+    
+      <div class="fleet-thumbs">
+        <img src="bus-2.jpg" data-caption="Страничен изглед на буса" alt="Страничен изглед">
+        <img src="bus-3.jpg" data-caption="Товарно пространство – вътрешност" alt="Товарно отделение">
+        <img src="bus-4.jpg" data-caption="Заден изглед на буса" alt="Заден изглед">
+        <img src="bus-5.jpg" data-caption="Рампа и товарна зона" alt="Рампа">
+      </div>
+    
+      <div class="fleet-note" id="fleetCaption">
+        Челен изглед на буса
       </div>
     </div>
+    
+    </div> <!-- ✅ КРАЙ на ЛЯВО: снимки (ТОЗИ РЕД ЛИПСВАШЕ) -->
+    
+    <!-- ДЯСНО: параметри -->
+    <div class="card">
 
     <!-- ДЯСНО: параметри -->
     <div class="card">
@@ -1388,7 +1397,21 @@ ${data.notes}
       window.location.href = `mailto:s_filipov@yahoo.com?subject=${subject}&body=${body}`;
     });
   }
+
+  const mainImg = document.getElementById("fleetMain");
+  const caption = document.getElementById("fleetCaption");
+  const thumbs = document.querySelectorAll(".fleet-thumbs img");
   
+  thumbs.forEach(img => {
+    img.addEventListener("click", () => {
+      mainImg.src = img.src;
+  
+      if (caption && img.dataset.caption) {
+        caption.textContent = img.dataset.caption;
+      }
+    });
+  });
+
 </script>
 
 </body>

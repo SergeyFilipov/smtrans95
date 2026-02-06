@@ -848,6 +848,11 @@ footer{
   outline:2px solid rgba(46,134,222,.6);
   border-radius:4px;
 }
+.search-hit-active{
+  outline: 3px solid rgba(46,134,222,.75);
+  border-radius: 8px;
+  background: rgba(255, 215, 0, .25);
+}
 
 </style>
 </head>
@@ -1638,44 +1643,92 @@ ${data.notes}
     });
   });
 
-/* ===== SEARCH (working highlight + Enter) ===== */
+/* ===== SEARCH ===== */
 
 const searchToggle = document.getElementById("searchToggle");
 const searchDropdown = document.getElementById("searchDropdown");
 const siteSearch = document.getElementById("siteSearch");
 
-let searchMarks = [];
-let activeIndex = 0;
+// помощна: активира таб
+function activateTab(tabName){
+  tabs.forEach(t=>t.classList.remove("active"));
+  pages.forEach(p=>p.classList.remove("active"));
 
-function clearSearchMarks(){
-  searchMarks.forEach(m => {
-    const parent = m.parentNode;
-    if (!parent) return;
-    parent.replaceChild(document.createTextNode(m.textContent), m);
-    parent.normalize();
-  });
-  searchMarks = [];
-  activeIndex = 0;
+  const tabEl = document.querySelector(`.tab[data-tab="${tabName}"]`);
+  const pageEl = document.querySelector(`.tabpage[data-page="${tabName}"]`);
+  if(tabEl) tabEl.classList.add("active");
+  if(pageEl) pageEl.classList.add("active");
 }
 
-function highlightSearch(query){
-  clearSearchMarks();
-  if (!query || query.trim().length < 2) return;
-
-  const q = query.trim();
-  const root = document.querySelector("main") || document.body;
-
-  // не търсим вътре в script/style
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-    acceptNode(node){
-      if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-      const p = node.parentElement;
-      if (!p) return NodeFilter.FILTER_REJECT;
-      const tag = p.tagName?.toLowerCase();
-      if (tag === "script" || tag === "style") return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
+// маха стария highlight
+function clearSearchHighlight(){
+  document.querySelectorAll(".search-hit-active").forEach(el=>{
+    el.classList.remove("search-hit-active");
   });
+}
+
+// намира първия елемент с текста (в активната секция)
+function highlightFirstMatchInActivePage(q){
+  const activePage = document.querySelector(".tabpage.active");
+  if(!activePage) return;
+
+  const needle = q.toLowerCase();
+  const all = activePage.querySelectorAll("*");
+
+  for (const el of all){
+    if(el.tagName === "SCRIPT" || el.tagName === "STYLE") continue;
+
+    const t = (el.textContent || "").toLowerCase();
+    if(t.includes(needle)){
+      el.classList.add("search-hit-active");
+      el.scrollIntoView({behavior:"smooth", block:"center"});
+      return true;
+    }
+  }
+  return false;
+}
+
+// главна функция за търсене
+function runSiteSearch(raw){
+  const q = (raw || "").trim();
+  clearSearchHighlight();
+  if(q.length < 2) return;
+
+  // 1) намираме първата секция (tabpage), която съдържа текста (дори да е скрита)
+  const allPages = Array.from(document.querySelectorAll(".tabpage"));
+  const foundPage = allPages.find(p => (p.textContent || "").toLowerCase().includes(q.toLowerCase()));
+
+  // 2) ако е намерена – отваряме tab-а
+  if(foundPage){
+    const tabName = foundPage.dataset.page;
+    if(tabName) activateTab(tabName);
+
+    // 3) след като се покаже секцията, хайлайтваме и скролваме
+    setTimeout(()=> highlightFirstMatchInActivePage(q), 30);
+  }
+}
+
+searchToggle.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  searchDropdown.style.display = (searchDropdown.style.display === "block" ? "none" : "block");
+  siteSearch.focus();
+});
+
+// ENTER -> търси + отваря таба
+siteSearch.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    runSiteSearch(siteSearch.value);
+  }
+});
+
+// при писане – търси “на живо”
+siteSearch.addEventListener("input", ()=>{
+  runSiteSearch(siteSearch.value);
+});
+
+// да не се затваря при клик вътре
+searchDropdown.addEventListener("click", (e)=> e.stopPropagation());
 
   const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
 

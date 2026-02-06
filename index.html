@@ -167,6 +167,10 @@ main{
   color:#1f2937;
 }
 
+.fleet-lead{
+  text-align:center;
+}
+  
 /* ================= CTA ================= */
 
 .cta{
@@ -939,8 +943,8 @@ footer{
       <div class="fleet-thumbs">
         <img src="bus-2.jpg" data-caption="Страничен изглед на буса" alt="Страничен изглед">
         <img src="bus-3.jpg" data-caption="Страничен изглед на буса" alt="Страничен изглед">
-        <img src="bus-4.jpg" data-caption="Заден изглед на буса" alt="Заден изглед">
-        <img src="bus-5.jpg" data-caption="Рампа и товарна зона" alt="Рампа">
+        <img src="bus-4.jpg" data-caption="Рампа и товарна зона" alt="Рампа">
+        <img src="bus-5.jpg" data-caption="Заден изглед на буса" alt="Заден изглед">
       </div>
     
       <div class="fleet-note" id="fleetCaption">
@@ -1404,13 +1408,34 @@ ${data.notes}
   const caption = document.getElementById("fleetCaption");
   const thumbs = document.querySelectorAll(".fleet-thumbs img");
   
+  const DEFAULT_SRC = "bus-1.jpg";
+  const DEFAULT_CAPTION = "Брандиран бус – страничен изглед (основна снимка)";
+  
+  let revertTimer = null;
+  
+  function scheduleRevert(){
+    if (revertTimer) clearTimeout(revertTimer);
+  
+    revertTimer = setTimeout(() => {
+      if (mainImg) mainImg.src = DEFAULT_SRC;
+      if (caption) caption.textContent = DEFAULT_CAPTION;
+    }, 5000);
+  }
+  
+  // старт: след 5 сек да си остане/върне на bus-1
+  scheduleRevert();
+  
   thumbs.forEach(img => {
     img.addEventListener("click", () => {
+      if (!mainImg) return;
+  
       mainImg.src = img.src;
   
-      if (caption && img.dataset.caption) {
-        caption.textContent = img.dataset.caption;
+      if (caption){
+        caption.textContent = img.dataset.caption || DEFAULT_CAPTION;
       }
+  
+      scheduleRevert();
     });
   });
 

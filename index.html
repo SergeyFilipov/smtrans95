@@ -867,58 +867,56 @@ footer{
       <span class="sm">SM</span><span class="trans">Trans</span><span class="n95">95</span>
     </div>
 
-  <div class="nav-group">
-    <!-- НАВИГАЦИЯ -->
-    <div class="tabs">
-      <div class="tab active" data-tab="home">Начало</div>
-      <div class="tab" data-tab="about">Кои сме ние</div>
-      <div class="tab" data-tab="services">Услуги</div>
-      <div class="tab" data-tab="fleet">Автопарк</div>
-      <div class="tab" data-tab="contact">Контакти</div>
-    </div>
-  
-    <!-- ИНСТРУМЕНТИ (Търсене + Език) -->
-    <div class="header-tools">
-
-      <!-- ТЪРСЕНЕ -->
-      <div class="search-box">
-        <div class="tool-btn" id="searchToggle">🔍 Търсене</div>
-
-        <div class="search-dropdown" id="searchDropdown">
-          <input
-            type="text"
-            id="siteSearch"
-            placeholder="Търсене в сайта..."
-          >
-        </div>
+    <div class="nav-group">
+      <!-- НАВИГАЦИЯ -->
+      <div class="tabs">
+        <div class="tab active" data-tab="home">Начало</div>
+        <div class="tab" data-tab="about">Кои сме ние</div>
+        <div class="tab" data-tab="services">Услуги</div>
+        <div class="tab" data-tab="fleet">Автопарк</div>
+        <div class="tab" data-tab="contact">Контакти</div>
       </div>
 
-      <!-- ЕЗИК -->
-      <div class="lang-box">
-        <div class="tool-btn" id="langToggle">
-          <span id="langFlag">🇧🇬</span>
-          <span id="langCode">BG</span>
-        </div>
+      <!-- ИНСТРУМЕНТИ (Търсене + Език) -->
+      <div class="header-tools">
 
-        <div class="lang-dropdown" id="langDropdown">
-          <div class="lang-option" data-flag="🇧🇬" data-code="BG">
-            <span class="flag">🇧🇬</span><span class="code">BG</span> Български
-          </div>
-        
-          <div class="lang-option" data-flag="🇬🇧" data-code="EN">
-            <span class="flag">🇬🇧</span><span class="code">EN</span> English
-          </div>
-        
-          <div class="lang-option" data-flag="🇹🇷" data-code="TR">
-            <span class="flag">🇹🇷</span><span class="code">TR</span> Türkçe
+        <!-- ТЪРСЕНЕ -->
+        <div class="search-box">
+          <div class="tool-btn" id="searchToggle">🔍 Търсене</div>
+
+          <div class="search-dropdown" id="searchDropdown">
+            <input type="text" id="siteSearch" placeholder="Търсене в сайта...">
           </div>
         </div>
-      </div>
 
-    </div>
+        <!-- ЕЗИК -->
+        <div class="lang-box">
+          <div class="tool-btn" id="langToggle">
+            <span id="langFlag">🇧🇬</span>
+            <span id="langCode">BG</span>
+          </div>
 
-  </div>
+          <div class="lang-dropdown" id="langDropdown">
+            <div class="lang-option" data-flag="🇧🇬" data-code="BG">
+              <span class="flag">🇧🇬</span><span class="code">BG</span> Български
+            </div>
+
+            <div class="lang-option" data-flag="🇬🇧" data-code="EN">
+              <span class="flag">🇬🇧</span><span class="code">EN</span> English
+            </div>
+
+            <div class="lang-option" data-flag="🇹🇷" data-code="TR">
+              <span class="flag">🇹🇷</span><span class="code">TR</span> Türkçe
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /header-tools -->
+    </div>   <!-- /nav-group -->
+
+  </div>     <!-- /wrap topbar -->
 </header>
+
 
 <main class="wrap">
 
@@ -1660,54 +1658,122 @@ function activateTab(tabName){
   if(pageEl) pageEl.classList.add("active");
 }
 
-// маха стария highlight
-function clearSearchHighlight(){
-  document.querySelectorAll(".search-hit-active").forEach(el=>{
-    el.classList.remove("search-hit-active");
+// escape за regex
+function escapeRegExp(s){
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// маха всички <mark> от предишно търсене в даден root
+function clearMarks(root){
+  if (!root) return;
+
+  root.querySelectorAll("mark.search-hit, mark.search-hit-active").forEach(mark => {
+    const text = document.createTextNode(mark.textContent);
+    mark.replaceWith(text);
+    if (text.parentNode) text.parentNode.normalize();
   });
 }
 
-// намира първия елемент с текста (в активната секция)
-function highlightFirstMatchInActivePage(q){
+// маркира всички срещания в active page
+function highlightMarksInActivePage(q){
   const activePage = document.querySelector(".tabpage.active");
-  if(!activePage) return;
+  if (!activePage) return [];
 
-  const needle = q.toLowerCase();
-  const all = activePage.querySelectorAll("*");
+  // чистим старите маркировки само в активната страница
+  clearMarks(activePage);
 
-  for (const el of all){
-    if(el.tagName === "SCRIPT" || el.tagName === "STYLE") continue;
+  const re = new RegExp(escapeRegExp(q), "gi");
+  const marks = [];
 
-    const t = (el.textContent || "").toLowerCase();
-    if(t.includes(needle)){
-      el.classList.add("search-hit-active");
-      el.scrollIntoView({behavior:"smooth", block:"center"});
-      return true;
+  const walker = document.createTreeWalker(
+    activePage,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode(node){
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        const p = node.parentElement;
+        if (!p) return NodeFilter.FILTER_REJECT;
+
+        const tag = p.tagName;
+        if (tag === "SCRIPT" || tag === "STYLE") return NodeFilter.FILTER_REJECT;
+
+        return NodeFilter.FILTER_ACCEPT;
+      }
     }
-  }
-  return false;
+  );
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(node => {
+    const text = node.nodeValue;
+    if (!re.test(text)) return;
+
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+
+    let last = 0;
+    let m;
+
+    while ((m = re.exec(text)) !== null){
+      const before = text.slice(last, m.index);
+      if (before) frag.appendChild(document.createTextNode(before));
+
+      const mark = document.createElement("mark");
+      mark.className = "search-hit";
+      mark.textContent = m[0];
+      frag.appendChild(mark);
+      marks.push(mark);
+
+      last = m.index + m[0].length;
+    }
+
+    const after = text.slice(last);
+    if (after) frag.appendChild(document.createTextNode(after));
+
+    node.parentNode.replaceChild(frag, node);
+  });
+
+  return marks;
 }
 
-// главна функция за търсене
+// фокусира първия резултат
+function focusFirstMark(marks){
+  if (!marks || !marks.length) return;
+
+  marks.forEach(m => m.classList.remove("search-hit-active"));
+  marks[0].classList.add("search-hit-active");
+  marks[0].scrollIntoView({ behavior:"smooth", block:"center" });
+}
+
+// главна функция за търсене: намира таб -> отваря -> маркира думата
 function runSiteSearch(raw){
   const q = (raw || "").trim();
-  clearSearchHighlight();
-  if(q.length < 2) return;
+  if (q.length < 2) return;
 
-  // 1) намираме първата секция (tabpage), която съдържа текста (дори да е скрита)
+  // 1) намираме първата секция (tabpage), която съдържа текста
   const allPages = Array.from(document.querySelectorAll(".tabpage"));
-  const foundPage = allPages.find(p => (p.textContent || "").toLowerCase().includes(q.toLowerCase()));
+  const foundPage = allPages.find(p =>
+    (p.textContent || "").toLowerCase().includes(q.toLowerCase())
+  );
 
-  // 2) ако е намерена – отваряме tab-а
-  if(foundPage){
-    const tabName = foundPage.dataset.page;
-    if(tabName) activateTab(tabName);
-
-    // 3) след като се покаже секцията, хайлайтваме и скролваме
-    setTimeout(()=> highlightFirstMatchInActivePage(q), 30);
+  // ако няма резултат: чистим маркери в активната страница и край
+  if (!foundPage){
+    clearMarks(document.querySelector(".tabpage.active"));
+    return;
   }
-}
 
+  // 2) отваряме таба
+  const tabName = foundPage.dataset.page;
+  if (tabName) activateTab(tabName);
+
+  // 3) след като се покаже – маркираме
+  setTimeout(() => {
+    const marks = highlightMarksInActivePage(q);
+    focusFirstMark(marks);
+  }, 30);
+}
+  
 searchToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
 

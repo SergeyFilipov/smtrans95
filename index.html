@@ -753,6 +753,80 @@ footer{
   padding-bottom: 15mm;
 }
 
+/* ===== HEADER TOOLS ===== */
+
+.header-tools{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* бутон */
+.tool-btn{
+  background:linear-gradient(135deg,#2e86de,#00c2a8);
+  color:#04151c;
+  padding:6px 12px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.14);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* dropdown общо */
+.search-box,
+.lang-box{
+  position:relative;
+}
+
+/* ===== SEARCH ===== */
+
+.search-dropdown{
+  position:absolute;
+  top:38px;
+  right:0;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:12px;
+  padding:10px;
+  display:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.search-dropdown input{
+  width:220px;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+/* ===== LANGUAGE ===== */
+
+.lang-dropdown{
+  position:absolute;
+  top:38px;
+  right:0;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:12px;
+  overflow:hidden;
+  display:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.lang-option{
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.lang-option:hover{
+  background:#f1f5f9;
+}
+
 </style>
 </head>
 
@@ -760,10 +834,13 @@ footer{
 
 <header>
   <div class="wrap topbar">
+
+    <!-- ЛОГО -->
     <div class="logo">
       <span class="sm">SM</span><span class="trans">Trans</span><span class="n95">95</span>
     </div>
 
+    <!-- НАВИГАЦИЯ -->
     <div class="tabs">
       <div class="tab active" data-tab="home">Начало</div>
       <div class="tab" data-tab="about">Кои сме ние</div>
@@ -771,6 +848,47 @@ footer{
       <div class="tab" data-tab="fleet">Автопарк</div>
       <div class="tab" data-tab="contact">Контакти</div>
     </div>
+
+    <!-- ИНСТРУМЕНТИ (Търсене + Език) -->
+    <div class="header-tools">
+
+      <!-- ТЪРСЕНЕ -->
+      <div class="search-box">
+        <div class="tool-btn" id="searchToggle">🔍 Търсене</div>
+
+        <div class="search-dropdown" id="searchDropdown">
+          <input
+            type="text"
+            id="siteSearch"
+            placeholder="Търсене в сайта..."
+          >
+        </div>
+      </div>
+
+      <!-- ЕЗИК -->
+      <div class="lang-box">
+        <div class="tool-btn" id="langToggle">
+          <span id="langFlag">🇧🇬</span>
+          <span id="langCode">BG</span>
+        </div>
+
+        <div class="lang-dropdown" id="langDropdown">
+          <div class="lang-option" data-flag="🇧🇬" data-code="BG">
+            🇧🇬 Български
+          </div>
+
+          <div class="lang-option" data-flag="🇬🇧" data-code="EN">
+            🇬🇧 English
+          </div>
+
+          <div class="lang-option" data-flag="🇹🇷" data-code="TR">
+            🇹🇷 Türkçe
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </header>
 
@@ -1496,6 +1614,60 @@ ${data.notes}
       scheduleRevert();
     });
   });
+
+/* ===== SEARCH ===== */
+
+const searchToggle = document.getElementById("searchToggle");
+const searchDropdown = document.getElementById("searchDropdown");
+const siteSearch = document.getElementById("siteSearch");
+
+searchToggle.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  searchDropdown.style.display =
+    searchDropdown.style.display === "block" ? "none" : "block";
+  siteSearch.focus();
+});
+
+// търсене в страницата
+siteSearch.addEventListener("input", ()=>{
+  const text = siteSearch.value.toLowerCase();
+  if(text.length < 2) return;
+
+  const content = document.body.innerText.toLowerCase();
+  const index = content.indexOf(text);
+
+  if(index !== -1){
+    window.find(text);
+  }
+});
+
+
+/* ===== LANGUAGE ===== */
+
+const langToggle = document.getElementById("langToggle");
+const langDropdown = document.getElementById("langDropdown");
+const langFlag = document.getElementById("langFlag");
+const langCode = document.getElementById("langCode");
+
+langToggle.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  langDropdown.style.display =
+    langDropdown.style.display === "block" ? "none" : "block";
+});
+
+document.querySelectorAll(".lang-option").forEach(option=>{
+  option.addEventListener("click", ()=>{
+    langFlag.textContent = option.dataset.flag;
+    langCode.textContent = option.dataset.code;
+    langDropdown.style.display = "none";
+  });
+});
+
+/* затваряне при клик извън */
+document.addEventListener("click", ()=>{
+  searchDropdown.style.display = "none";
+  langDropdown.style.display = "none";
+});
 
 </script>
 

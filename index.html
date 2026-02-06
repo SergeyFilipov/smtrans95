@@ -440,33 +440,41 @@ footer{
     gap: 10px;
   }
 
-  /* ===== TAB GRID FIX (3 + 2) ===== */
-  .tabs{
+  //* ================= MOBILE: ВСИЧКО В 2 РЕДА ================= */
+  .nav-group{
+    margin-left: 0;
     width: 100%;
-    padding: 0 8px;
-    display: flex;
-    flex-wrap: wrap;
+  }
+  
+  /* общ контейнер за табове + инструменти */
+  .tabs,
+  .header-tools{
+    display: contents; /* 🔑 ключът */
+  }
+  
+  /* grid контейнер */
+  .nav-group{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
   }
-
-  .tab{
-    flex: 1 1 calc(33.333% - 8px); /* 3 колони */
-    text-align: center;
-    padding: 8px 10px;
-    border-radius: 12px;
-    font-size: 14px;
+  
+  /* всички бутони – еднакви */
+  .tab,
+  .tool-btn{
+    padding: 6px 8px;
+    font-size: 13px;
     font-weight: 800;
-    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+    border-radius: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  /* втори ред автоматично */
+  .nav-group > *{
     min-width: 0;
   }
 
-  /* инструменти на отделен ред */
-  .header-tools{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
   /* ===== MOBILE FIX: SEARCH dropdown да не бяга извън екрана ===== */
   .search-box{ position:relative; }
   

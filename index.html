@@ -76,6 +76,16 @@
     .logo .trans{color:var(--accent)}
     .logo .n95{color:var(--accent2)}
 
+    /* Hero логото – същите 3 цвята като хедъра */
+    .hero-logo{
+      font-weight: 900;
+      letter-spacing: -.6px;
+    }
+    
+    .hero-logo .sm{ color: var(--text); }
+    .hero-logo .trans{ color: var(--accent); }
+    .hero-logo .n95{ color: var(--accent2); }
+
     nav{
       display:flex;
       gap:14px;
@@ -332,7 +342,13 @@
     <div class="hero-grid">
 
       <div>
-        <h1 class="h1">SMTrans95 ЕООД<br>Лек транспорт и доставки</h1>
+        <h1 class="h1">
+        <span class="hero-logo">
+          <span class="sm">SM</span><span class="trans">Trans</span><span class="n95">95</span>
+        </span>
+        ЕООД<br/>
+        Лек транспорт и доставки
+      </h1>
         <p class="lead">
           В момента сме в подготовка за стартиране на дейността.
           Приемаме запитвания за <strong>лек транспорт до 3.5 т</strong>.

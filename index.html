@@ -606,7 +606,7 @@ footer{
           <label style="display:block; font-weight:800; margin:6px 0 6px;">Документи (по желание)</label>
           <input type="file" id="docs" name="docs" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
           <div style="font-size:12px; color:var(--muted); margin-top:6px;">
-            При demo вариант (mailto) файловете не се изпращат автоматично – прикачете ги ръчно в имейла.
+            Файловете не се изпращат автоматично – прикачете ги ръчно в имейла.
           </div>
         </div>
 
@@ -658,10 +658,12 @@ footer{
     const grid = form.querySelector(".form-grid");
     if (grid) grid.style.display = "grid";
     success.style.display = "none";
+    form.reset();
   }
 
   // направи функциите достъпни за onclick=""
   window.openModal = openModal;
+  window.closeModal = closeModal;
   // Име: забраняваме цифри в реално време
     const nameInput = document.querySelector('input[name="name"]');
     if (nameInput){
@@ -679,8 +681,6 @@ footer{
       });
     }
 
-  window.closeModal = closeModal;
-
   tabs.forEach(tab=>{
     tab.addEventListener("click", ()=>{
       // при смяна на таб затвори модала и ресетни success
@@ -696,9 +696,9 @@ footer{
   });
 
   // submit handler (само веднъж!)
-  const form = document.getElementById("inqForm");
-  if (form){
-    form.addEventListener("submit", function(e){
+  const inqForm = document.getElementById("inqForm");
+  if (inqForm){
+    inqForm.addEventListener("submit", function(e){
       e.preventDefault();
 
       const data = Object.fromEntries(new FormData(this).entries());

@@ -653,7 +653,17 @@ footer{
 [data-page="about"]{
   padding-bottom:15mm;
 }
-  
+
+.registry-link{
+  color:#2563eb;          /* отчетливо син */
+  font-weight:700;
+  text-decoration:underline;
+}
+
+.registry-link:hover{
+  color:#1d4ed8;
+}
+
 </style>
 </head>
 
@@ -891,15 +901,22 @@ footer{
         <div class="firm-title">Фирмени данни</div>
 
         <div class="firm-row">
-          <span>Фирма:</span>
-          <strong>СМ.Транс95 ЕООД</strong>
-        </div>
-
-        <div class="firm-row">
           <span>ЕИК:</span>
           <strong>208680881</strong>
         </div>
-
+        
+        <div class="firm-row">
+          <span>Търговски регистър:</span>
+          <a
+            href="https://portal.registryagency.bg/CR/Reports/ActiveConditionTabResult?uic=208680881"
+            target="_blank"
+            rel="noopener"
+            class="registry-link"
+          >
+            ✔ Проверка в Търговския регистър
+          </a>
+        </div>
+        
         <div class="firm-row">
           <span>Адрес:</span>
           <strong>

@@ -282,6 +282,55 @@ footer{
     line-height: 1.15;
   }
 }
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.modal-box{
+  background:#fff;
+  padding:24px;
+  width:100%;
+  max-width:420px;
+  border-radius:16px;
+  position:relative;
+}
+
+.modal-box input,
+.modal-box textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+.modal-box button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:800;
+  background:#22c55e;
+  color:#fff;
+  cursor:pointer;
+}
+
+.close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  cursor:pointer;
+  font-size:18px;
+}
+
 </style>
 </head>
 
@@ -321,7 +370,7 @@ footer{
       </p>
 
       <div class="cta">
-        <button class="cta-hot">Запитване</button>
+        <button class="cta-hot" onclick="openModal()">Запитване</button>
         <div class="btn">Какво предлагаме</div>
       </div>
     </div>
@@ -397,7 +446,34 @@ tabs.forEach(tab=>{
     document.querySelector(`[data-page="${tab.dataset.tab}"]`).classList.add("active");
   });
 });
+
+function openModal(){
+  document.getElementById("contactModal").style.display="flex";
+}
+
+function closeModal(){
+  document.getElementById("contactModal").style.display="none";
+}
 </script>
+
+  <!-- CONTACT MODAL -->
+<div class="modal" id="contactModal">
+  <div class="modal-box">
+    <h2>Попълнете контакт формата</h2>
+
+    <form action="send.php" method="POST">
+      <input type="text" name="name" placeholder="Име *" required>
+      <input type="email" name="email" placeholder="e-Поща *" required>
+      <input type="tel" name="phone" placeholder="Тел. номер *" required>
+
+      <textarea name="message" placeholder="Съобщение *" required></textarea>
+
+      <button type="submit">Изпрати</button>
+    </form>
+
+    <span class="close" onclick="closeModal()">✕</span>
+  </div>
+</div>
 
 </body>
 </html>

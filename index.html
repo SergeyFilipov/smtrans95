@@ -248,9 +248,9 @@ main{
 /* ================= KPI ================= */
 
 .kpis{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
-  gap: 16px;
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .kpi .n{
@@ -391,7 +391,12 @@ footer{
 }
 
 @media (max-width: 900px){
-  .form-grid{ grid-template-columns: 1fr; }
+  .kpis{
+    grid-template-columns: 1fr;
+  }
+  .kpi .n{
+    white-space: normal;
+  }
 }
 
 .success-box{

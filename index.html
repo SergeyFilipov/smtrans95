@@ -468,13 +468,16 @@ footer{
     gap: 10px;
   }
   /* ===== MOBILE FIX: SEARCH dropdown да не бяга извън екрана ===== */
-  .search-box{ width:100%; }
+  .search-box{ position:relative; }
   
   .search-dropdown{
-    left:0;                 /* вместо да се лепи вдясно */
-    right:auto;
-    width:min(92vw, 320px); /* да се събира в екрана */
-  }
+  top: 44px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 420px;
+  z-index: 50;
+}
   
   .search-dropdown input{
     width:100%;             /* да не е 220px на мобилен */

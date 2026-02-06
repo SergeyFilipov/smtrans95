@@ -99,15 +99,14 @@ main{
 /* ================= HERO ================= */
 .hero-banner{
   width:100%;
-  padding: 24px 0;       /* въздух отгоре и отдолу */
-  background:#000;       /* ако снимката не пълни – няма бели ръбове */
+  padding: 16px 0;        /* малко въздух */
+  background: var(--bg);  /* вместо черно */
 }
 
 .hero-banner img{
   width:100%;
-  height:auto;           /* ← КЛЮЧОВО: няма рязане */
-  max-height:420px;      /* ← тук я „смаляваме“ */
-  object-fit:contain;    /* ← показва ЦЯЛАТА снимка */
+  height:auto;            /* 100% без рязане */
+  max-width: 1100px;      /* да е като .wrap (центрирано) */
   display:block;
   margin:0 auto;
 }

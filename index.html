@@ -417,7 +417,7 @@ footer{
       </p>
 
       <div class="cta">
-        <button class="cta-hot" onclick="openModal()">Запитване</button>
+        <button type="button" class="cta-hot" onclick="openModal()">Запитване</button>
         <div class="btn">Какво предлагаме</div>
       </div>
     </div>
@@ -487,21 +487,60 @@ footer{
       <div class="form-grid">
     
         <div class="full">
-          <input type="text" name="name" placeholder="Име *" required>
+          <input
+            type="text"
+            name="name"
+            placeholder="Име *"
+            required
+            minlength="2"
+            maxlength="60"
+            autocomplete="name"
+            pattern="^[A-Za-zА-Яа-яЁёІіЇїЄєЪъЬь\s\-.]+$"
+            title="Само букви, интервал, тире или точка. Без цифри."
+          >
         </div>
     
         <div>
-          <input type="email" name="email" placeholder="e-Поща *" required>
+          <input
+            type="email"
+            name="email"
+            placeholder="e-Поща *"
+            required
+            autocomplete="email"
+            maxlength="120"
+            title="Въведете валиден имейл (пример: name@example.com)"
+          >
         </div>
     
         <div>
-          <input type="tel" name="phone" placeholder="Тел. номер *" required>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Тел. номер * (пример: +359876092113)"
+            required
+            autocomplete="tel"
+            maxlength="16"
+            inputmode="tel"
+            pattern="^\+?[0-9]{8,15}$"
+            title="Само цифри, може да започва с +. Дължина 8–15 цифри."
+          >
         </div>
     
         <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
     
         <div>
-          <input type="number" name="weightKg" placeholder="Тегло (кг) *" min="0" required>
+          <input
+            type="number"
+            name="weightKg"
+            placeholder="Тегло (кг) *"
+            required
+            min="1"
+            max="3500"
+            step="1"
+            inputmode="numeric"
+            title="1 до 3500 кг"
+          >
+
         </div>
     
         <div>
@@ -513,17 +552,42 @@ footer{
         </div>
     
         <div>
-          <input type="text" name="dimensions" placeholder="Размери/обем (пример: 120x80x160 см или ~3 м³)">
+          <input
+            type="text"
+            name="dimensions"
+            placeholder="Размери/обем (120x80x160 см или ~3 m³)"
+            maxlength="30"
+            pattern="^(\s*~?\s*\d+(\.\d+)?\s*(m3|m³|м3|м³)\s*|\s*\d{1,4}\s*[xX×]\s*\d{1,4}\s*[xX×]\s*\d{1,4}\s*(см|cm|мм|mm|м|m)?\s*)$"
+            title="Пример: 120x80x160 см или ~3 m³"
+          >
         </div>
     
         <div class="full" style="font-weight:900; margin-top:6px;">Маршрут (От → До)</div>
     
         <div class="full">
-          <input type="text" name="pickupAddress" placeholder="Място на вземане (град + адрес) *" required>
+           <input
+            type="text"
+            name="pickupAddress"
+            placeholder="Място на вземане (град + адрес) *"
+            required
+            minlength="5"
+            maxlength="140"
+            pattern="^(?=.*[A-Za-zА-Яа-яЁёІіЇїЄє]).{5,140}$"
+            title="Трябва да съдържа поне 1 буква (пример: София, ул. ... №3)."
+          >
         </div>
     
         <div class="full">
-          <input type="text" name="dropoffAddress" placeholder="Място на разтоварване (град + адрес) *" required>
+          <input
+            type="text"
+            name="dropoffAddress"
+            placeholder="Място на разтоварване (град + адрес) *"
+            required
+            minlength="5"
+            maxlength="140"
+            pattern="^(?=.*[A-Za-zА-Яа-яЁёІіЇїЄє]).{5,140}$"
+            title="Трябва да съдържа поне 1 буква (пример: Пловдив, бул. ... №10)."
+          >
         </div>
     
         <div>
@@ -537,7 +601,15 @@ footer{
         <div class="full">
           <textarea name="notes" placeholder="Допълнително: етаж/асансьор, нужда от помощ, достъп, бележки *" required></textarea>
         </div>
-    
+
+        <div class="full">
+          <label style="display:block; font-weight:800; margin:6px 0 6px;">Документи (по желание)</label>
+          <input type="file" id="docs" name="docs" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+          <div style="font-size:12px; color:var(--muted); margin-top:6px;">
+            При demo вариант (mailto) файловете не се изпращат автоматично – прикачете ги ръчно в имейла.
+          </div>
+        </div>
+
         <div class="form-actions full">
           <button type="button" class="btn-back" onclick="handleCancel()">Назад</button>
           <button type="submit" class="btn-submit">Изпрати</button>
@@ -590,6 +662,23 @@ footer{
 
   // направи функциите достъпни за onclick=""
   window.openModal = openModal;
+  // Име: забраняваме цифри в реално време
+    const nameInput = document.querySelector('input[name="name"]');
+    if (nameInput){
+      nameInput.addEventListener("input", () => {
+        nameInput.value = nameInput.value.replace(/[0-9]/g, "");
+      });
+    }
+    
+    // Телефон: позволяваме само + и цифри
+    const phoneInput = document.querySelector('input[name="phone"]');
+    if (phoneInput){
+      phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/(?!^\+)[^\d]/g, "");
+        phoneInput.value = phoneInput.value.replace(/^(\+{2,})/, "+");
+      });
+    }
+
   window.closeModal = closeModal;
 
   tabs.forEach(tab=>{

@@ -99,22 +99,22 @@ main{
 /* ================= HERO ================= */
 .hero-banner{
   width:100%;
-  height:380px;        /* леко по-ниска → ~1 см рязане горе/долу */
-  overflow:hidden;
+  padding: 12px 0;      /* ~1 см „рязане“ визуално, без реално рязане */
+  background:#000;      /* ако искаш черен фон отстрани */
 }
 
 .hero-banner img{
   width:100%;
-  height:auto;            /* 100% без рязане */
-  max-width: 1100px;      /* да е като .wrap (центрирано) */
+  max-width:1100px;     /* същото като .wrap */
+  height:auto;          /* НИКОГА не реже */
   display:block;
   margin:0 auto;
 }
 
 /* mobile */
-@media (max-width: 768px){
-  .hero-banner img{
-    max-height:280px;
+@media (max-width:768px){
+  .hero-banner{
+    padding:8px 0;
   }
 }
 

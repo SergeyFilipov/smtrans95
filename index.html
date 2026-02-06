@@ -268,25 +268,19 @@ footer{
 
   .topbar{
     flex-direction: column;
-    align-items: stretch;      /* табовете използват цялата ширина */
+    align-items: stretch;
     gap: 12px;
   }
 
   .tabs{
     width: 100%;
-    padding: 0 8px;            /* ВЪЗДУХ отляво и отдясно */
+    padding: 0 8px;
     justify-content: flex-start;
   }
 
   .tab{
-    margin: 2px 0;             /* да не лепи първия таб */
+    margin: 2px 0;
   }
-
-  .h1{
-    font-size: 30px;
-    line-height: 1.15;
-  }
-}
 
   .h1{
     font-size: 30px;
@@ -352,6 +346,12 @@ footer{
   gap:12px;
 }
 .form-grid .full{ grid-column: 1 / -1; }
+  
+.form-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
 
 @media (max-width: 900px){
   .form-grid{ grid-template-columns: 1fr; }
@@ -392,6 +392,18 @@ footer{
   right:14px;
   cursor:pointer;
   font-size:18px;
+}
+
+.form-legend{
+  text-align:right;
+  font-size:12px;
+  color:var(--muted);
+  margin:0 0 8px;
+}
+
+.req{
+  color:#ef4444;
+  font-weight:900;
 }
 
 </style>
@@ -500,13 +512,15 @@ footer{
     <h2>Попълнете контакт формата</h2>
 
     <form id="inqForm">
+      <div class="form-legend"><span class="req">*</span> Задължително</div>
       <div class="form-grid">
     
-        <div class="full">
+        <div class="form-field full">
+          <label>Име <span class="req">*</span></label>
           <input
             type="text"
             name="name"
-            placeholder="Име *"
+            placeholder="напр. Иван Петров"
             required
             minlength="2"
             maxlength="60"
@@ -516,11 +530,12 @@ footer{
           >
         </div>
     
-        <div>
+        <div class="form-field">
+          <label>e-Поща <span class="req">*</span></label>
           <input
             type="email"
             name="email"
-            placeholder="e-Поща *"
+            placeholder="напр. name@example.com"
             required
             autocomplete="email"
             maxlength="120"
@@ -528,11 +543,12 @@ footer{
           >
         </div>
     
-        <div>
+        <div class="form-field">
+          <label>Тел. номер <span class="req">*</span></label>
           <input
             type="tel"
             name="phone"
-            placeholder="Тел. номер * (пример: +359876092113)"
+            placeholder="напр. +359876092113"
             required
             autocomplete="tel"
             maxlength="16"
@@ -541,7 +557,7 @@ footer{
             title="Само цифри, може да започва с +. Дължина 8–15 цифри."
           >
         </div>
-    
+
         <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
     
         <div>

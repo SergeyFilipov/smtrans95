@@ -664,6 +664,80 @@ footer{
   color:#1d4ed8;
 }
 
+/* ===== FLEET SECTION ===== */
+.fleet-grid{
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:22px;
+}
+
+@media (max-width: 900px){
+  .fleet-grid{ grid-template-columns: 1fr; }
+}
+
+.fleet-gallery{
+  margin-top:12px;
+}
+
+.fleet-main{
+  width:100%;
+  border-radius:18px;
+  border:1px solid var(--line);
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  display:block;
+}
+
+.fleet-thumbs{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:10px;
+  margin-top:10px;
+}
+
+.fleet-thumbs img{
+  width:100%;
+  height:110px;
+  object-fit:cover;
+  border-radius:14px;
+  border:1px solid var(--line);
+  display:block;
+}
+
+@media (max-width: 600px){
+  .fleet-thumbs img{ height:90px; }
+}
+
+.fleet-note{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.fleet-kpis{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:12px;
+  margin-top:12px;
+}
+
+@media (max-width: 900px){
+  .fleet-kpis{ grid-template-columns: 1fr; }
+}
+
+.fleet-list{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(2,6,23,.1);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.fleet-li{
+  font-weight:700;
+  color:#1f2937;
+}
+
 </style>
 </head>
 
@@ -839,9 +913,66 @@ footer{
 
 <!-- FLEET -->
 <section class="tabpage" data-page="fleet">
-  <div class="card">
-    <h2 class="section-title">Автопарк</h2>
-    <p>1 бус до 3.5 т – стартов автопарк.</p>
+  <div class="fleet-grid">
+
+    <!-- ЛЯВО: снимки -->
+    <div class="card">
+      <h2 class="section-title">Автопарк</h2>
+      <p class="lead" style="margin-top:-4px;">
+        Лекотоварен транспорт до 3.5 т за България и ЕС — поддържан, надежден и готов за курс.
+      </p>
+
+      <div class="fleet-gallery">
+        <!-- Основна снимка -->
+        <img class="fleet-main" src="bus-1.jpg" alt="SMTrans95 – бус">
+
+        <!-- Мини снимки (по желание) -->
+        <div class="fleet-thumbs">
+          <img src="bus-1.jpg" alt="SMTrans95 – бус снимка 1">
+          <img src="bus-2.jpg" alt="SMTrans95 – бус снимка 2">
+          <img src="bus-3.jpg" alt="SMTrans95 – бус снимка 3">
+        </div>
+
+        <div class="fleet-note">
+          Снимките са реални от автопарка на фирмата.
+        </div>
+      </div>
+    </div>
+
+    <!-- ДЯСНО: параметри -->
+    <div class="card">
+      <div class="section-title" style="text-align:center;">Параметри и възможности</div>
+
+      <div class="fleet-kpis">
+        <div class="kpi">
+          <div class="n">До 3.5 т</div>
+          <div class="t">лекотоварен превоз</div>
+        </div>
+
+        <div class="kpi">
+          <div class="n">България + ЕС</div>
+          <div class="t">локални и международни курсове</div>
+        </div>
+
+        <div class="kpi">
+          <div class="n">Различни товари</div>
+          <div class="t">палети, кашони, мебели и др.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="n">Сигурност</div>
+          <div class="t">планиране и коректно изпълнение</div>
+        </div>
+      </div>
+
+      <div class="fleet-list">
+        <div class="fleet-li">✅ Регулярна техническа поддръжка</div>
+        <div class="fleet-li">✅ Подходящо за частични и обемни пратки</div>
+        <div class="fleet-li">✅ Гъвкав график според товара и маршрута</div>
+        <div class="fleet-li">✅ Ясни условия и срокове</div>
+      </div>
+    </div>
+
   </div>
 </section>
 

@@ -290,14 +290,46 @@ footer{
 
 .modal-box{
   background:#fff;
-  padding:28px;
-  width:min(980px, 92vw);   /* ГОЛЯМ НА ДЕСКТОП */
-  max-width:980px;
+  padding:22px;
+  width:min(880px, 92vw);   /* малко по-тясно */
+  max-height:85vh;          /* НЕ по-високо от екрана */
+  overflow:auto;            /* вътрешен скрол */
   border-radius:18px;
   position:relative;
   box-shadow:0 28px 80px rgba(0,0,0,.35);
 }
 
+.form-actions{
+  display:flex;
+  gap:12px;
+  position:sticky;
+  bottom:0;
+  background:#fff;
+  padding:12px 0 6px;
+}
+
+.btn-back{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#f1f5f9;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.btn-submit{
+  flex:2;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:800;
+  background:#22c55e;
+  color:#fff;
+  cursor:pointer;
+}
+ 
 .form-grid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -330,14 +362,11 @@ footer{
 }
 
 .modal-box button{
-  width:100%;
   padding:14px;
   border:none;
   border-radius:12px;
   font-size:16px;
   font-weight:800;
-  background:#22c55e;
-  color:#fff;
   cursor:pointer;
 }
 
@@ -449,6 +478,85 @@ footer{
   <div class="wrap">© <span id="y"></span> SMTrans95 ЕООД</div>
 </footer>
 
+  <!-- CONTACT MODAL -->
+<div class="modal" id="contactModal">
+  <div class="modal-box">
+    <h2>Попълнете контакт формата</h2>
+
+    <form id="inqForm">
+      <div class="form-grid">
+    
+        <div class="full">
+          <input type="text" name="name" placeholder="Име *" required>
+        </div>
+    
+        <div>
+          <input type="email" name="email" placeholder="e-Поща *" required>
+        </div>
+    
+        <div>
+          <input type="tel" name="phone" placeholder="Тел. номер *" required>
+        </div>
+    
+        <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
+    
+        <div>
+          <input type="number" name="weightKg" placeholder="Тегло (кг) *" min="0" required>
+        </div>
+    
+        <div>
+          <input type="text" name="cargoType" placeholder="Вид товар (напр. кашони/мебели/палети) *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="qty" placeholder="Брой (пакети/палети)" >
+        </div>
+    
+        <div>
+          <input type="text" name="dimensions" placeholder="Размери/обем (пример: 120x80x160 см или ~3 м³)">
+        </div>
+    
+        <div class="full" style="font-weight:900; margin-top:6px;">Маршрут (От → До)</div>
+    
+        <div class="full">
+          <input type="text" name="pickupAddress" placeholder="Място на вземане (град + адрес) *" required>
+        </div>
+    
+        <div class="full">
+          <input type="text" name="dropoffAddress" placeholder="Място на разтоварване (град + адрес) *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="pickupTime" placeholder="Кога да се вземе (дата/час или 'гъвкаво') *" required>
+        </div>
+    
+        <div>
+          <input type="text" name="dropoffTime" placeholder="Кога да се достави (дата/час или 'гъвкаво')">
+        </div>
+    
+        <div class="full">
+          <textarea name="notes" placeholder="Допълнително: етаж/асансьор, нужда от помощ, достъп, бележки *" required></textarea>
+        </div>
+    
+        <div class="form-actions full">
+          <button type="button" class="btn-back" onclick="handleCancel()">Назад</button>
+          <button type="submit" class="btn-submit">Изпрати</button>
+        </div>
+    
+      </div>
+    
+      <div class="success-box" id="successBox">
+        ✅ Запитването е подготвено за изпращане и е успешно обработено. Ще се свържем с вас!
+        <div style="font-weight:600; opacity:.9; margin-top:6px;">
+          Може да затворите прозореца или да смените таб.
+        </div>
+      </div>
+    </form>
+
+    <span class="close" onclick="handleCancel()">✕</span>
+  </div>
+</div>
+
 <script>
   // година във футъра
   document.getElementById("y").textContent = new Date().getFullYear();
@@ -464,6 +572,12 @@ footer{
     document.getElementById("contactModal").style.display = "none";
   }
 
+  function handleCancel(){
+  resetModalState();
+  closeModal();
+  }
+  window.handleCancel = handleCancel;
+  
   function resetModalState(){
     const form = document.getElementById("inqForm");
     const success = document.getElementById("successBox");
@@ -536,84 +650,6 @@ ${data.notes}
   }
   
 </script>
-
-  <!-- CONTACT MODAL -->
-<div class="modal" id="contactModal">
-  <div class="modal-box">
-    <h2>Попълнете контакт формата</h2>
-
-    <form id="inqForm">
-      <div class="form-grid">
-    
-        <div class="full">
-          <input type="text" name="name" placeholder="Име *" required>
-        </div>
-    
-        <div>
-          <input type="email" name="email" placeholder="e-Поща *" required>
-        </div>
-    
-        <div>
-          <input type="tel" name="phone" placeholder="Тел. номер *" required>
-        </div>
-    
-        <div class="full" style="font-weight:900; margin-top:6px;">Данни за товара</div>
-    
-        <div>
-          <input type="number" name="weightKg" placeholder="Тегло (кг) *" min="0" required>
-        </div>
-    
-        <div>
-          <input type="text" name="cargoType" placeholder="Вид товар (напр. кашони/мебели/палети) *" required>
-        </div>
-    
-        <div>
-          <input type="text" name="qty" placeholder="Брой (пакети/палети)" >
-        </div>
-    
-        <div>
-          <input type="text" name="dimensions" placeholder="Размери/обем (пример: 120x80x160 см или ~3 м³)">
-        </div>
-    
-        <div class="full" style="font-weight:900; margin-top:6px;">Маршрут (От → До)</div>
-    
-        <div class="full">
-          <input type="text" name="pickupAddress" placeholder="Място на вземане (град + адрес) *" required>
-        </div>
-    
-        <div class="full">
-          <input type="text" name="dropoffAddress" placeholder="Място на разтоварване (град + адрес) *" required>
-        </div>
-    
-        <div>
-          <input type="text" name="pickupTime" placeholder="Кога да се вземе (дата/час или 'гъвкаво') *" required>
-        </div>
-    
-        <div>
-          <input type="text" name="dropoffTime" placeholder="Кога да се достави (дата/час или 'гъвкаво')">
-        </div>
-    
-        <div class="full">
-          <textarea name="notes" placeholder="Допълнително: етаж/асансьор, нужда от помощ, достъп, бележки *" required></textarea>
-        </div>
-    
-        <div class="full">
-          <button type="submit">Изпрати</button>
-        </div>
-    
-      </div>
-    
-      <div class="success-box" id="successBox">
-        ✅ Запитването е подготвено за изпращане и е успешно обработено. Ще се свържем с вас!
-        <div style="font-weight:600; opacity:.9; margin-top:6px;">
-          Може да затворите прозореца или да смените таб.
-        </div>
-      </div>
-    </form>
-
-    <span class="close" onclick="closeModal()">✕</span>
-  </div>
-</div>
 
 </body>
 </html>

@@ -1710,8 +1710,12 @@ function runSiteSearch(raw){
 
 searchToggle.addEventListener("click", (e)=>{
   e.stopPropagation();
-  searchDropdown.style.display = (searchDropdown.style.display === "block" ? "none" : "block");
-  siteSearch.focus();
+
+  const isOpen = searchDropdown.style.display === "block";
+  searchDropdown.style.display = isOpen ? "none" : "block";
+
+  // фокус само при отваряне
+  if (!isOpen) siteSearch.focus();
 });
 
 // ENTER -> търси + отваря таба

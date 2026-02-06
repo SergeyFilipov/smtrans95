@@ -153,6 +153,19 @@ main{
   color: var(--muted);
   line-height: 1.6;
 }
+.h1-soft{
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin: 0 0 18px;
+}
+
+.lead-strong{
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  color:#1f2937;
+}
 
 /* ================= CTA ================= */
 
@@ -253,10 +266,6 @@ main{
   gap: 12px;
 }
 
-.kpi .n{
-  white-space: nowrap;
-}
-
 .kpi{
   padding: 18px;
   border-radius: 14px;
@@ -280,7 +289,9 @@ main{
   color: var(--muted);
   line-height: 1.4;
 }
-
+  
+.card{ min-width: 0; }
+.kpi{ min-width: 0; }
 /* ================= FOOTER ================= */
 
 footer{
@@ -478,58 +489,58 @@ footer{
     <img src="198122145.jpg" alt="SMTrans95 бус">
   </div>
   
-  <div class="hero-grid">    
+  <div class="hero-grid">
+  
+    <!-- ЛЯВА КОЛОНА -->
     <div>
-        <h1 class="h1 h1-soft">
-          СМ.Транс95 ЕООД
-        </h1>
-      
-        <p class="lead lead-strong">
-          <em><strong>Когато времето е важно, изборът е ясен.</strong></em>
-        </p>
-      
-        <p class="lead lead-strong">
-          <em>
-            Всяка пратка има значение – от единичен палет до пълен бус.
-            Осигуряваме надежден транспорт в България и Европейския съюз
-            с ясни условия, точни срокове и персонален подход.
-          </em>
-        </p>
-      
-        <p class="lead lead-strong">
-          <em>
-            Без излишни обещания. Само реално изпълнение и коректно отношение.
-          </em>
-        </p>
-      
-        <div class="cta">
-          <button type="button" class="cta-hot" onclick="openModal()">Запитване</button>
-        </div>
+      <h1 class="h1 h1-soft">СМ.Транс95 ЕООД</h1>
+  
+      <p class="lead lead-strong">
+        <em><strong>Когато времето е важно, изборът е ясен.</strong></em>
+      </p>
+  
+      <p class="lead lead-strong">
+        <em>
+          Всяка пратка има значение – от единичен палет до пълен бус.
+          Осигуряваме надежден транспорт в България и Европейския съюз
+          с ясни условия, точни срокове и персонален подход.
+        </em>
+      </p>
+  
+      <p class="lead lead-strong">
+        <em>Без излишни обещания. Само реално изпълнение и коректно отношение.</em>
+      </p>
+  
+      <div class="cta">
+        <button type="button" class="cta-hot" onclick="openModal()">Запитване</button>
       </div>
     </div>
-
+  
+    <!-- ДЯСНА КОЛОНА -->
     <div class="card">
       <div class="section-title" style="text-align:center;">Как работим</div>
-      
+  
       <div class="kpis">
         <div class="kpi">
-          <div class="n">Превози до 3.5 т</div>
+          <div class="n">Превози до 3.5&nbsp;т</div>
           <div class="t">лекотоварни превози</div>
         </div>
-      
+  
         <div class="kpi">
           <div class="n">България и ЕС</div>
           <div class="t">локални и международни курсове</div>
         </div>
-      
+  
         <div class="kpi">
           <div class="n">Различни видове товари</div>
           <div class="t">палети, кашони, мебели и др.</div>
         </div>
-      
+  
         <div class="kpi">
           <div class="n">Бърза оферта</div>
-          <div class="t">цена според маршрута, спецификата и параметрите на товара</div>
+          <div class="t">
+            цена според маршрута, спецификата и параметрите на товара
+          </div>
         </div>
       </div>
     </div>

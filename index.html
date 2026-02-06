@@ -143,21 +143,71 @@
       cursor:pointer;
     }
 
-    /* ===== HOT CTA ===== */
-
+    /* ===== MAIN CTA BUTTON – ЗАПИТВАНЕ ===== */
     .cta-hot{
-      background: linear-gradient(135deg, #00c2a8, #2E86DE);
-      color: #07121f;
+      padding: 16px 26px;        /* по-голям бутон */
+      font-size: 18px;           /* по-едър текст */
+      font-weight: 900;
+      border-radius: 16px;
+    
+      background: linear-gradient(
+        135deg,
+        #00e0b8,
+        #00b4d8
+      );                         /* ярко зелено-синьо */
+    
+      color: #05201a;
       border: none;
-      box-shadow: 0 12px 28px rgba(0,194,168,.45);
+      cursor: pointer;
+    
+      box-shadow:
+        0 14px 30px rgba(0,224,184,.45),
+        0 4px 10px rgba(0,0,0,.15);
+    
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        filter .15s ease;
     }
-
+    
+    /* hover */
     .cta-hot:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 16px 34px rgba(46,134,222,.55);
+      transform: translateY(-2px);
       filter: brightness(1.08);
+      box-shadow:
+        0 20px 42px rgba(0,224,184,.65),
+        0 8px 18px rgba(0,0,0,.20);
+    }
+    
+    /* click */
+    .cta-hot:active{
+      transform: translateY(0);
+      box-shadow:
+        0 26px 55px rgba(0,224,184,.75),
+        0 10px 24px rgba(0,0,0,.25);
     }
 
+    /* ===== CTA PULSE ANIMATION ===== */
+    @keyframes ctaPulse {
+      0% {
+        transform: scale(0.94);
+        box-shadow: 0 10px 22px rgba(0,224,184,.35);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 22px 48px rgba(0,224,184,.65);
+      }
+      100% {
+        transform: scale(0.94);
+        box-shadow: 0 10px 22px rgba(0,224,184,.35);
+      }
+    }
+    
+    /* активиране на пулса */
+    .cta-hot{
+      animation: ctaPulse 2.6s ease-in-out infinite;
+    }
+    
     /* ================= CARDS ================= */
 
     .card{

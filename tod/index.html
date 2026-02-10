@@ -1,1 +1,926 @@
-рееш
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FlyToGet – Mobile Mock</title>
+  <style>
+    :root{
+      --bg:#071c1f;
+      --card:#102a2e;
+      --card2:#0d262a;
+      --stroke:#1f3f44;
+      --text:#ffffff;
+      --muted:#a8c1c6;
+      --accent:#ff4a1c;
+      --accent2:#ff6a3d;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:14px;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 50% -200px, rgba(255,74,28,.18), transparent 60%),
+                  radial-gradient(900px 600px at 110% 20%, rgba(0,180,200,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width: 420px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 14px 14px 90px;
+    }
+
+    /* Header */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 0 6px;
+      position: relative;
+    }
+    .topbar h1{
+      margin:0;
+      font-size: 22px;
+      letter-spacing:.2px;
+    }
+    .bell{
+      position:absolute;
+      right:0;
+      width: 38px;
+      height: 38px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    /* Cards */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .card.soft{
+      background: rgba(16,42,46,.85);
+      border: 1px solid var(--stroke);
+      box-shadow: none;
+    }
+    .title{
+      font-size: 13px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+      margin: 0 0 10px;
+    }
+    .btn{
+      width:100%;
+      border:0;
+      padding: 14px 14px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 26px rgba(255,74,28,.22);
+      cursor:pointer;
+    }
+    .btn:active{transform: translateY(1px);}
+    .btn.ghost{
+      background: rgba(255,255,255,.06);
+      box-shadow:none;
+      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 650;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 12px;
+      width:100%;
+    }
+    .pill label{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      min-width: 42px;
+    }
+    .pill .value{
+      font-weight: 750;
+      font-size: 16px;
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .swap{
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      flex: 0 0 auto;
+      user-select:none;
+    }
+
+    /* Table-ish */
+    .grid3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      padding: 10px 0 0;
+    }
+    .grid3 .hdr{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      padding-bottom: 6px;
+    }
+    .grid3 .cell{
+      font-size: 18px;
+      font-weight: 800;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .muted{color: rgba(255,255,255,.72);}
+    .right{text-align:right;}
+    .center{text-align:center;}
+    .linkish{
+      color: rgba(255,255,255,.80);
+      font-weight: 700;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    /* Ticket / QR */
+    .ticket{
+      padding: 0;
+      overflow:hidden;
+      background: rgba(16,42,46,.9);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+    .ticketInner{
+      padding: 14px;
+    }
+    .qrWrap{
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      width: 100%;
+      display:grid;
+      place-items:center;
+    }
+    canvas{display:block; width: 100%; height: auto; max-width: 320px;}
+    .kv{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .kv .k{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      text-transform: uppercase;
+      letter-spacing:.35px;
+    }
+    .kv .v{
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    /* Bottom nav */
+    .nav{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: min(420px, calc(100% - 20px));
+      background: rgba(7,28,31,.70);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 10px;
+      box-shadow: var(--shadow);
+      z-index: 50;
+    }
+    .nav button{
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.72);
+      padding: 10px 6px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 750;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 6px;
+    }
+    .nav button .dot{
+      width: 8px; height: 8px; border-radius:999px;
+      background: transparent;
+    }
+    .nav button.active{
+      background: rgba(255,255,255,.06);
+      color: white;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .nav button.active .dot{background: var(--accent);}
+    .icon{
+      width: 22px;
+      height: 22px;
+      display:grid;
+      place-items:center;
+      opacity:.95;
+      font-size: 16px;
+    }
+
+    /* Forms */
+    .formGrid{
+      display:grid;
+      gap: 10px;
+    }
+    input, textarea, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: white;
+      outline: none;
+      font-size: 14px;
+    }
+    textarea{min-height: 110px; resize: vertical;}
+    .mini{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      line-height: 1.35;
+    }
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .hidden{display:none !important;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 id="screenTitle">Departures</h1>
+      <div class="bell" title="Notifications">🔔</div>
+    </div>
+
+    <!-- SCREENS -->
+    <main>
+      <!-- Departures -->
+      <section id="screen-departures">
+        <div class="card soft">
+          <div class="title">Plan your trip</div>
+
+          <div class="row" style="gap:10px;">
+            <div class="pill" style="flex:1;">
+              <label>From</label>
+              <div class="value">
+                <span id="depFrom">—</span>
+                <span class="muted" aria-hidden="true">✈️</span>
+              </div>
+            </div>
+
+            <div class="swap" id="swapBtn" title="Swap">⇅</div>
+
+            <div class="pill" style="flex:1;">
+              <label>To</label>
+              <div class="value">
+                <span id="depTo">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid3" id="depTable">
+            <div class="hdr">Departure</div>
+            <div class="hdr center">Arrival</div>
+            <div class="hdr right">Track</div>
+            <!-- rows injected -->
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <div class="linkish" id="laterDepartures">Later departures ›</div>
+          </div>
+        </div>
+
+        <div class="card soft">
+          <div class="title">Flymatch</div>
+          <div class="row">
+            <div class="muted" style="flex:1; font-weight:650;">
+              We suggest an express train for your flight
+            </div>
+            <button class="btn" style="width:auto; padding:10px 14px; font-size:14px;">Try now</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Buy -->
+      <section id="screen-buy" class="hidden">
+        <div class="card soft">
+          <div class="title">Buy ticket</div>
+
+          <div class="pill">
+            <label>From</label>
+            <div class="value">
+              <span id="buyFrom">—</span>
+              <span class="muted">✈️</span>
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="pill">
+            <label>To</label>
+            <div class="value">
+              <span id="buyTo">—</span>
+              <span class="muted"></span>
+            </div>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="font-weight:850;">1</div>
+              <div style="font-weight:850;">Adult</div>
+              <div style="margin-left:auto; font-weight:900;" id="buyPrice">—</div>
+            </div>
+            <div class="row" style="margin-top:10px;">
+              <div class="muted" style="font-size:13px;">Valid for <span id="buyValidDays">—</span> days</div>
+              <div class="linkish">Change ✎</div>
+            </div>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:34px;height:24px;border-radius:6px;background:rgba(255,255,255,.08);display:grid;place-items:center;">🙂</div>
+                <div style="font-weight:850;">Vipps</div>
+              </div>
+              <div class="linkish" style="margin-left:auto;">Change ✎</div>
+            </div>
+          </div>
+
+          <div style="height:16px;"></div>
+          <button class="btn" id="payBtn">Pay <span id="payAmount">—</span></button>
+        </div>
+      </section>
+
+      <!-- Tickets -->
+      <section id="screen-tickets" class="hidden">
+        <div class="card ticket">
+          <div class="ticketInner">
+            <div class="qrWrap">
+              <canvas id="qrCanvas" width="330" height="330"></canvas>
+            </div>
+
+            <div style="height:10px;"></div>
+            <div style="display:flex; align-items:center; gap:10px; justify-content:center;">
+              <div style="font-weight:900; letter-spacing:.3px; opacity:.9;">FLYTOGET</div>
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div style="font-size:22px; font-weight:950;" id="ticketType">Student</div>
+            <div class="muted" style="margin-top:4px;" id="ticketDesc">
+              Enkeltbillett for studenter med gyldig studentbevis
+            </div>
+
+            <div style="height:10px;"></div>
+
+            <div class="muted" style="font-size:13px; text-transform:uppercase; letter-spacing:.35px;">Travel route</div>
+            <div style="font-size:18px; font-weight:900; margin-top:4px;">
+              <span id="ticketRouteFrom">—</span> → <span id="ticketRouteTo">—</span>
+            </div>
+
+            <div class="kv">
+              <div>
+                <div class="k">Expires in</div>
+                <div class="v"><span id="ticketExpires">—</span> days</div>
+              </div>
+              <div class="right">
+                <div class="k">Ticket price</div>
+                <div class="v" id="ticketPrice">—</div>
+              </div>
+            </div>
+
+            <div class="kv">
+              <div>
+                <div class="k">Ticket number</div>
+                <div class="v" id="ticketNumber">—</div>
+              </div>
+              <div class="right">
+                <div class="k"> </div>
+                <div class="v" style="font-size:14px; opacity:.85;"> </div>
+              </div>
+            </div>
+
+            <div style="height:14px;"></div>
+            <button class="btn ghost" id="shareBtn">Share ⤴︎</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile -->
+      <section id="screen-profile" class="hidden">
+        <div class="card soft">
+          <button class="btn" id="loginBtn">Sign up / Log in &nbsp; 👤+</button>
+
+          <div style="height:14px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="opacity:.85;">⚙️</div>
+                <div style="font-weight:850; opacity:.65;">My settings</div>
+              </div>
+              <div style="opacity:.6;">›</div>
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="opacity:.85;">🧾</div>
+                <div style="font-weight:850; opacity:.65;">Receipts</div>
+              </div>
+              <div style="opacity:.6;">›</div>
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="opacity:.85;">💳</div>
+                <div style="font-weight:850; opacity:.65;">Payment methods</div>
+              </div>
+              <div style="opacity:.6;">›</div>
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="opacity:.85;">🎧</div>
+                <div style="font-weight:850;">Customer service</div>
+              </div>
+              <div style="opacity:.9;">›</div>
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="card" style="margin:0; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);">
+            <div class="row">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <div style="opacity:.85;">📄</div>
+                <div style="font-weight:850;">Terms and conditions</div>
+              </div>
+              <div style="opacity:.9;">›</div>
+            </div>
+          </div>
+
+          <div style="height:14px;"></div>
+          <div class="muted" style="text-align:center;">Version <span id="versionText">11.6.0</span></div>
+        </div>
+
+        <!-- Editor -->
+        <div class="card soft">
+          <div class="title">Data editor (local on your phone)</div>
+          <div class="mini">
+            Променяш данните тук → <b>Save</b> ги пази на телефона (localStorage).<br/>
+            Ако искаш да ги прехвърлиш/архивираш: <b>Export</b> ще изтегли JSON.
+          </div>
+          <div style="height:12px;"></div>
+
+          <div class="formGrid">
+            <div class="two">
+              <div>
+                <div class="mini">From (спирка)</div>
+                <input id="editFrom" placeholder="Oslo Lufthavn" />
+              </div>
+              <div>
+                <div class="mini">To (спирка)</div>
+                <input id="editTo" placeholder="Drammen" />
+              </div>
+            </div>
+
+            <div class="two">
+              <div>
+                <div class="mini">Ticket type</div>
+                <input id="editTicketType" placeholder="Student" />
+              </div>
+              <div>
+                <div class="mini">Ticket number</div>
+                <input id="editTicketNumber" placeholder="225501816" />
+              </div>
+            </div>
+
+            <div class="two">
+              <div>
+                <div class="mini">Ticket price (text)</div>
+                <input id="editTicketPrice" placeholder="162 NOK" />
+              </div>
+              <div>
+                <div class="mini">Expires (days)</div>
+                <input id="editExpires" type="number" min="0" placeholder="82" />
+              </div>
+            </div>
+
+            <div class="two">
+              <div>
+                <div class="mini">Buy price (text)</div>
+                <input id="editBuyPrice" placeholder="324 NOK" />
+              </div>
+              <div>
+                <div class="mini">Buy valid days</div>
+                <input id="editBuyValidDays" type="number" min="0" placeholder="90" />
+              </div>
+            </div>
+
+            <div>
+              <div class="mini">Departures list (format: HH:MM,HH:MM,track) — по редове</div>
+              <textarea id="editDepartures" placeholder="13:50,14:48,3&#10;14:10,15:08,3"></textarea>
+            </div>
+
+            <div class="row">
+              <button class="btn" id="saveBtn" style="flex:1;">Save</button>
+              <button class="btn ghost" id="resetBtn" style="width:auto;">Reset</button>
+              <button class="btn ghost" id="exportBtn" style="width:auto;">Export</button>
+            </div>
+            <div class="mini" id="saveStatus" style="min-height:18px;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="nav" aria-label="Bottom navigation">
+    <button data-screen="departures" class="active"><div class="icon">🕒</div><div>Departures</div><div class="dot"></div></button>
+    <button data-screen="buy"><div class="icon">＋</div><div>Buy</div><div class="dot"></div></button>
+    <button data-screen="tickets"><div class="icon">🎟️</div><div>Tickets</div><div class="dot"></div></button>
+    <button data-screen="profile"><div class="icon">👤</div><div>Profile</div><div class="dot"></div></button>
+  </nav>
+
+<script>
+/** ---------------------------
+ *  1) Default data (as in screenshots)
+ *  --------------------------- */
+const DEFAULT_DATA = {
+  version: "11.6.0",
+  from: "Oslo Lufthavn",
+  to: "Drammen",
+
+  ticket: {
+    type: "Student",
+    desc: "Enkeltbillett for studenter med gyldig studentbevis",
+    expiresDays: 82,
+    priceText: "162 NOK",
+    number: "225501816"
+  },
+
+  buy: {
+    priceText: "324 NOK",
+    validDays: 90
+  },
+
+  departures: [
+    { depart: "13:50", arrive: "14:48", track: "3" },
+    { depart: "14:10", arrive: "15:08", track: "3" }
+  ]
+};
+
+const STORAGE_KEY = "tod_onefile_data_v1";
+
+/** ---------------------------
+ *  2) Load/save data
+ *  --------------------------- */
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return structuredClone(DEFAULT_DATA);
+    const parsed = JSON.parse(raw);
+    // minimal merge fallback
+    return { ...structuredClone(DEFAULT_DATA), ...parsed,
+      ticket: { ...structuredClone(DEFAULT_DATA.ticket), ...(parsed.ticket||{}) },
+      buy: { ...structuredClone(DEFAULT_DATA.buy), ...(parsed.buy||{}) },
+      departures: Array.isArray(parsed.departures) && parsed.departures.length ? parsed.departures : structuredClone(DEFAULT_DATA.departures)
+    };
+  }catch(e){
+    return structuredClone(DEFAULT_DATA);
+  }
+}
+function saveData(data){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function resetData(){
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+/** ---------------------------
+ *  3) Simple QR-ish generator (visual)
+ *  (Not a real ticket QR, just a pattern from data hash)
+ *  --------------------------- */
+function hashString(s){
+  let h = 2166136261;
+  for(let i=0;i<s.length;i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function drawFakeQR(canvas, text){
+  const ctx = canvas.getContext("2d");
+  const size = canvas.width;
+  ctx.clearRect(0,0,size,size);
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0,0,size,size);
+
+  const modules = 33; // looks QR-ish
+  const m = Math.floor(size / modules);
+  const pad = Math.floor((size - modules*m)/2);
+
+  function finder(x,y){
+    ctx.fillStyle="#000";
+    ctx.fillRect(pad+x*m, pad+y*m, 7*m, 7*m);
+    ctx.fillStyle="#fff";
+    ctx.fillRect(pad+(x+1)*m, pad+(y+1)*m, 5*m, 5*m);
+    ctx.fillStyle="#000";
+    ctx.fillRect(pad+(x+2)*m, pad+(y+2)*m, 3*m, 3*m);
+  }
+  finder(0,0);
+  finder(modules-7,0);
+  finder(0,modules-7);
+
+  const h = hashString(text);
+  // fill modules excluding finder zones
+  for(let y=0;y<modules;y++){
+    for(let x=0;x<modules;x++){
+      const inFinder =
+        (x<8 && y<8) ||
+        (x>modules-9 && y<8) ||
+        (x<8 && y>modules-9);
+      if(inFinder) continue;
+
+      // pseudo randomness from hash + coords
+      const v = hashString(h + ":" + x + "," + y);
+      const bit = (v & 1) === 1;
+
+      if(bit){
+        ctx.fillStyle="#000";
+        ctx.fillRect(pad+x*m, pad+y*m, m, m);
+      }
+    }
+  }
+
+  // center mark like in your screenshot
+  const c = Math.floor(modules/2);
+  ctx.fillStyle="#000";
+  ctx.fillRect(pad+(c-3)*m, pad+(c-3)*m, 6*m, 6*m);
+  ctx.fillStyle="#fff";
+  ctx.fillRect(pad+(c-2)*m, pad+(c-2)*m, 4*m, 4*m);
+  ctx.fillStyle="#000";
+  ctx.fillRect(pad+(c-1)*m, pad+(c-1)*m, 2*m, 2*m);
+}
+
+/** ---------------------------
+ *  4) UI rendering
+ *  --------------------------- */
+let state = loadData();
+
+function renderAll(){
+  // Titles
+  document.getElementById("versionText").textContent = state.version;
+
+  // Departures screen
+  document.getElementById("depFrom").textContent = state.from;
+  document.getElementById("depTo").textContent = state.to;
+
+  const table = document.getElementById("depTable");
+  // remove old rows
+  [...table.querySelectorAll(".cell")].forEach(n=>n.remove());
+
+  state.departures.forEach(r=>{
+    const c1 = document.createElement("div");
+    c1.className="cell";
+    c1.textContent = r.depart;
+
+    const c2 = document.createElement("div");
+    c2.className="cell center";
+    c2.textContent = r.arrive;
+
+    const c3 = document.createElement("div");
+    c3.className="cell right";
+    c3.textContent = r.track;
+
+    table.appendChild(c1); table.appendChild(c2); table.appendChild(c3);
+  });
+
+  // Buy screen
+  document.getElementById("buyFrom").textContent = state.from;
+  document.getElementById("buyTo").textContent = state.to;
+  document.getElementById("buyPrice").textContent = state.buy.priceText;
+  document.getElementById("payAmount").textContent = state.buy.priceText;
+  document.getElementById("buyValidDays").textContent = state.buy.validDays;
+
+  // Tickets screen
+  document.getElementById("ticketType").textContent = state.ticket.type;
+  document.getElementById("ticketDesc").textContent = state.ticket.desc;
+  document.getElementById("ticketRouteFrom").textContent = state.from;
+  document.getElementById("ticketRouteTo").textContent = state.to;
+  document.getElementById("ticketExpires").textContent = state.ticket.expiresDays;
+  document.getElementById("ticketPrice").textContent = state.ticket.priceText;
+  document.getElementById("ticketNumber").textContent = state.ticket.number;
+
+  // Draw QR based on key data
+  const qrText = `${state.ticket.type}|${state.from}->${state.to}|${state.ticket.number}|${state.ticket.expiresDays}|${state.ticket.priceText}`;
+  drawFakeQR(document.getElementById("qrCanvas"), qrText);
+
+  // Editor values
+  document.getElementById("editFrom").value = state.from;
+  document.getElementById("editTo").value = state.to;
+  document.getElementById("editTicketType").value = state.ticket.type;
+  document.getElementById("editTicketNumber").value = state.ticket.number;
+  document.getElementById("editTicketPrice").value = state.ticket.priceText;
+  document.getElementById("editExpires").value = state.ticket.expiresDays;
+  document.getElementById("editBuyPrice").value = state.buy.priceText;
+  document.getElementById("editBuyValidDays").value = state.buy.validDays;
+
+  document.getElementById("editDepartures").value =
+    state.departures.map(d => `${d.depart},${d.arrive},${d.track}`).join("\n");
+}
+
+function setStatus(msg){
+  const el = document.getElementById("saveStatus");
+  el.textContent = msg || "";
+}
+
+/** ---------------------------
+ *  5) Navigation
+ *  --------------------------- */
+const screens = ["departures","buy","tickets","profile"];
+function showScreen(name){
+  screens.forEach(s=>{
+    document.getElementById("screen-"+s).classList.toggle("hidden", s !== name);
+  });
+  document.querySelectorAll(".nav button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.screen === name);
+  });
+
+  const title = ({
+    departures:"Departures",
+    buy:"Buy ticket",
+    tickets:"Tickets",
+    profile:"Profile"
+  })[name] || "App";
+
+  document.getElementById("screenTitle").textContent = title;
+  setStatus("");
+}
+
+/** ---------------------------
+ *  6) Actions
+ *  --------------------------- */
+document.querySelectorAll(".nav button").forEach(btn=>{
+  btn.addEventListener("click", ()=> showScreen(btn.dataset.screen));
+});
+
+document.getElementById("swapBtn").addEventListener("click", ()=>{
+  const tmp = state.from;
+  state.from = state.to;
+  state.to = tmp;
+  saveData(state);
+  renderAll();
+});
+
+document.getElementById("saveBtn").addEventListener("click", ()=>{
+  const from = document.getElementById("editFrom").value.trim() || DEFAULT_DATA.from;
+  const to = document.getElementById("editTo").value.trim() || DEFAULT_DATA.to;
+
+  const tType = document.getElementById("editTicketType").value.trim() || DEFAULT_DATA.ticket.type;
+  const tNum = document.getElementById("editTicketNumber").value.trim() || DEFAULT_DATA.ticket.number;
+  const tPrice = document.getElementById("editTicketPrice").value.trim() || DEFAULT_DATA.ticket.priceText;
+  const tExp = Number(document.getElementById("editExpires").value);
+  const expiresDays = Number.isFinite(tExp) ? tExp : DEFAULT_DATA.ticket.expiresDays;
+
+  const bPrice = document.getElementById("editBuyPrice").value.trim() || DEFAULT_DATA.buy.priceText;
+  const bValid = Number(document.getElementById("editBuyValidDays").value);
+  const validDays = Number.isFinite(bValid) ? bValid : DEFAULT_DATA.buy.validDays;
+
+  const depLines = document.getElementById("editDepartures").value
+    .split("\n")
+    .map(l=>l.trim())
+    .filter(Boolean);
+
+  const departures = depLines.map(line=>{
+    const parts = line.split(",").map(p=>p.trim());
+    return {
+      depart: parts[0] || "—",
+      arrive: parts[1] || "—",
+      track: parts[2] || "—"
+    };
+  });
+
+  state.from = from;
+  state.to = to;
+  state.ticket.type = tType;
+  state.ticket.number = tNum;
+  state.ticket.priceText = tPrice;
+  state.ticket.expiresDays = expiresDays;
+  state.buy.priceText = bPrice;
+  state.buy.validDays = validDays;
+  state.departures = departures.length ? departures : structuredClone(DEFAULT_DATA.departures);
+
+  saveData(state);
+  renderAll();
+  setStatus("✅ Saved on this device.");
+});
+
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  resetData();
+  state = loadData();
+  renderAll();
+  setStatus("↩️ Reset to defaults.");
+});
+
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tod-data-export.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  setStatus("⬇️ Exported JSON file.");
+});
+
+document.getElementById("shareBtn").addEventListener("click", async ()=>{
+  const text = `Ticket: ${state.ticket.type}\nRoute: ${state.from} → ${state.to}\nNo: ${state.ticket.number}\nPrice: ${state.ticket.priceText}\nExpires: ${state.ticket.expiresDays} days`;
+  try{
+    if(navigator.share){
+      await navigator.share({ title: "Ticket", text });
+      setStatus("✅ Shared.");
+    }else{
+      await navigator.clipboard.writeText(text);
+      setStatus("📋 Copied to clipboard.");
+    }
+  }catch(e){
+    setStatus("ℹ️ Share cancelled.");
+  }
+});
+
+document.getElementById("payBtn").addEventListener("click", ()=>{
+  alert("Mock payment screen.\n(Тук може да закачим реален линк/страница ако искаш.)");
+});
+
+/** ---------------------------
+ *  7) Init
+ *  --------------------------- */
+renderAll();
+showScreen("departures");
+</script>
+</body>
+</html>
+
